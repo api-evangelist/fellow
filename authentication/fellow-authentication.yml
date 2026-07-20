@@ -1,0 +1,46 @@
+generated: '2026-07-19'
+method: searched
+source: https://developers.fellow.ai/reference/authentication-1
+docs: https://developers.fellow.ai/reference/authentication-1
+summary:
+  types: [apiKey, oauth2]
+  api_key_in: [header]
+  api_key_name: X-API-KEY
+  oauth2_flows: [authorizationCode]
+schemes:
+- name: ApiKeyAuth
+  type: apiKey
+  in: header
+  parameter_name: X-API-KEY
+  applies_to: Fellow Developer REST API
+  docs: https://developers.fellow.ai/reference/authentication-1
+  notes: >-
+    Personal API keys are generated per user under User Settings -> Developer API.
+    Keys are shown once and stored hashed. Multiple keys per user are supported
+    (one per application recommended for selective revocation). Keys may be issued
+    with "privileged access" (super-admin) that widens read scope to the whole
+    workspace; write operations always remain scoped to the key owner. The API must
+    be enabled workspace-wide by an admin under Security settings. Missing/invalid
+    key returns 401 Unauthorized; a valid key without resource access returns 403.
+- name: MCPOAuth
+  type: oauth2
+  applies_to: Fellow hosted MCP server (https://fellow.app/mcp)
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://fellow.app/mcp/authorize
+    tokenUrl: https://fellow.app/mcp/token
+    registrationUrl: https://fellow.app/mcp/register
+    revocationUrl: https://fellow.app/mcp/revoke
+    pkce: S256
+    scopes:
+    - read_calendar
+    - read_meeting_content
+    - read_action_items
+    - read_channels
+    - write_meeting_agenda
+  source: well-known/fellow-oauth-authorization-server.json
+access_model: >-
+  Both mechanisms enforce Fellow's in-app access rules: an API key or MCP token can
+  only reach resources the owner can already access in the Fellow interface
+  (attendee of the event, explicitly shared, or in a channel where the object was
+  published).
