@@ -1,0 +1,31 @@
+generated: '2026-07-19'
+method: generated
+source: https://developers.fellow.ai/reference/
+grounding: >-
+  operationIds are the exact reference-page identifiers published in Fellow's
+  developer docs (developers.fellow.ai/reference/<operationId>). No IDs invented.
+skills:
+- file: fellow-pull-meeting-transcripts.md
+  name: Pull recent meeting recordings and transcripts
+  api: Fellow Developer API
+  operations:
+  - apps_developer_api_api_get_authenticated_user
+  - apps_developer_api_api_get_recordings
+  - apps_developer_api_api_get_recording_by_id
+- file: fellow-triage-action-items.md
+  name: Triage and complete action items
+  api: Fellow Developer API
+  operations:
+  - apps_developer_api_api_get_action_items
+  - apps_developer_api_api_get_action_item_by_id
+  - apps_developer_api_api_mark_action_item_complete
+  - apps_developer_api_api_archive_action_item
+- file: fellow-subscribe-webhooks.md
+  name: Subscribe to real-time meeting webhooks
+  api: Fellow Developer API
+  operations:
+  - apps_developer_api_api_create_webhook
+  - apps_developer_api_api_list_webhooks
+  - apps_developer_api_api_get_webhook_by_id
+  - apps_developer_api_api_update_webhook
+  - apps_developer_api_api_delete_webhook

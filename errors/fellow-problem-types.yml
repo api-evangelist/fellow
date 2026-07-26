@@ -1,0 +1,53 @@
+generated: '2026-07-19'
+method: searched
+source: https://developers.fellow.ai/reference/status-codes
+format: custom-json
+envelope:
+  message: human-readable error description
+  errors: optional array of {location, message} field-level validation details
+content_type: application/json
+problems:
+- status: 200
+  code: Success
+  title: Success
+  description: The request completed.
+- status: 400
+  code: Bad Request
+  title: Bad Request
+  description: >-
+    Input validation error — an issue with the payload supplied (invalid filters,
+    cursor, event types, or other). Field-level detail returned in `errors[]`.
+- status: 401
+  code: Unauthorized
+  title: Unauthorized
+  description: Missing or invalid API key.
+- status: 403
+  code: Forbidden
+  title: Forbidden
+  description: >-
+    The user associated with the API key does not have access to the API, or does
+    not have access to the requested resource (e.g. super-admin required).
+- status: 404
+  code: Not Found
+  title: Not Found
+  description: The requested resource was not found.
+- status: 429
+  code: rate_limited
+  title: Too Many Requests
+  description: Rate limit exceeded (3 req/s or 10,000 req/day per API key).
+- status: 500
+  code: Internal Server Error
+  title: Internal Server Error
+  description: An unexpected error occurred; contact support@fellow.co.
+- status: 502
+  code: Bad Gateway
+  title: Bad Gateway
+  description: Failed to communicate with the webhook delivery service (e.g. URL verification failed). Webhook endpoints only.
+- status: 503
+  code: Service Unavailable
+  title: Service Unavailable
+  description: The webhooks feature is not enabled for this workspace. Webhook endpoints only.
+notes: >-
+  Fellow uses standard HTTP status codes with a custom `{message, errors[]}` JSON
+  envelope (not RFC 9457 problem+json). 502/503 are specific to the webhook
+  management endpoints.

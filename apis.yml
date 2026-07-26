@@ -1,8 +1,17 @@
 aid: fellow
 name: Fellow
-description: 'Fellow is a company surfaced as a portfolio company of craft-ventures, felicis and added
-  to the API Evangelist network as a stub for enrichment. Sector: saas. This profile is a lead awaiting
-  the enrichment pipeline.'
+description: >-
+  Fellow is an AI meeting assistant and meeting-management platform that records,
+  transcribes, and summarizes meetings, then captures structured notes, action items,
+  and decisions across a team's calendar. Fellow's Developer API opens that meeting
+  data through a REST interface: authenticated workspace users generate personal
+  API keys and retrieve recordings, transcripts, notes, and action items, upload
+  recordings, and manage webhook subscriptions for real-time events. Fellow also
+  publishes a hosted, OAuth-secured Model Context Protocol (MCP) server so AI
+  assistants like Claude and ChatGPT can query meeting context in natural language.
+  Backed by Craft Ventures and Felicis. The API requires a paid workspace plan and
+  is governed by workspace admins under Security settings, with a 90-day audit log,
+  SOC 2 Type II, HIPAA BAA availability, and GDPR/CCPA support.
 url: https://raw.githubusercontent.com/api-evangelist/fellow/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
@@ -11,18 +20,144 @@ x-backed-by:
 - felicis
 x-tier: stub
 x-tier-reason: portfolio-lead
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-19'
+image: https://framerusercontent.com/assets/J0X2qL3rwf819TDwjCc8iG9UjUk.png
 tags:
 - Company
 - Saas
-apis: []
+- Meetings
+- AI
+- Meeting Notes
+- Transcription
+- Productivity
+- Action Items
+- Webhooks
+- MCP
+apis:
+- name: Fellow Developer API
+  description: >-
+    REST API for accessing Fellow meeting data — recordings, transcripts, structured
+    notes, and action items — plus recording uploads and webhook management. Uses
+    X-API-KEY authentication, cursor-based pagination, and svix-signed webhooks for
+    real-time events (ai_note.generated, ai_note.shared_to_channel,
+    action_item.assigned, action_item.completed).
+  humanURL: https://developers.fellow.ai/
+  baseURL: https://{subdomain}.fellow.app/api/v1
+  tags:
+  - Meetings
+  - Transcription
+  - Notes
+  - Action Items
+  - Webhooks
+  properties:
+  - type: Documentation
+    url: https://developers.fellow.ai/
+  - type: APIReference
+    url: https://developers.fellow.ai/reference/introduction
+  - type: GettingStarted
+    url: https://developers.fellow.ai/reference/authentication-1
+  - type: Authentication
+    url: authentication/fellow-authentication.yml
+  - type: OAuthScopes
+    url: scopes/fellow-scopes.yml
+  - type: Webhooks
+    url: asyncapi/fellow-webhooks-asyncapi.yml
+  - type: AsyncAPI
+    url: asyncapi/fellow-webhooks-asyncapi.yml
+  - type: RateLimits
+    url: rate-limits/fellow-rate-limits.yml
+  - type: ErrorCatalog
+    url: errors/fellow-problem-types.yml
+  - type: Conventions
+    url: conventions/fellow-conventions.yml
+  - type: DataModel
+    url: data-model/fellow-data-model.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: DomainSecurity
+  url: security/fellow-domain-security.yml
 - type: Website
-  url: https://fellow.app
+  url: https://fellow.ai
+- type: DeveloperPortal
+  url: https://developers.fellow.ai/
+- type: Documentation
+  url: https://developers.fellow.ai/
+- type: APIReference
+  url: https://developers.fellow.ai/reference/introduction
+- type: GettingStarted
+  url: https://developers.fellow.ai/reference/authentication-1
+- type: Support
+  url: https://help.fellow.ai/
+- type: Blog
+  url: https://fellow.ai/blog
+- type: GitHubOrganization
+  url: https://github.com/fellowapp
+- type: Pricing
+  url: https://fellow.ai/pricing
+- type: SignUp
+  url: https://fellow.app/auth/login/
+- type: TermsOfService
+  url: https://fellow.ai/terms-of-use
+- type: PrivacyPolicy
+  url: https://fellow.ai/privacy-policy
+- type: StatusPage
+  url: https://status.fellow.ai/
+- type: TrustCenter
+  url: https://trust.fellow.ai/
+- type: Compliance
+  url: https://help.fellow.ai/en/articles/4302231-security-and-compliance
+- type: MCPServer
+  url: mcp/fellow-mcp.yml
+- type: Authentication
+  url: authentication/fellow-authentication.yml
+- type: OAuthScopes
+  url: scopes/fellow-scopes.yml
+- type: Webhooks
+  url: asyncapi/fellow-webhooks-asyncapi.yml
+- type: AsyncAPI
+  url: asyncapi/fellow-webhooks-asyncapi.yml
+- type: RateLimits
+  url: rate-limits/fellow-rate-limits.yml
+- type: ErrorCatalog
+  url: errors/fellow-problem-types.yml
+- type: Conventions
+  url: conventions/fellow-conventions.yml
+- type: Lifecycle
+  url: lifecycle/fellow-lifecycle.yml
+- type: Conformance
+  url: conformance/fellow-conformance.yml
+- type: DataModel
+  url: data-model/fellow-data-model.yml
+- type: LLMsTxt
+  url: llms/fellow-llms.txt
+- type: AgentSkill
+  url: skills/_index.yml
+- type: ChangeLog
+  url: changelog/fellow-changelog.yml
+- type: Packages
+  url: packages/fellow-packages.yml
+- type: WellKnown
+  url: well-known/fellow-well-known.yml
+x-enrichment:
+  date: '2026-07-19'
+  status: backfilled
+  pass: local-v1
+  note: backfilled from .gitignore signal + verified work evidence

@@ -1,0 +1,25 @@
+generated: '2026-07-19'
+method: searched
+source: https://developers.fellow.ai/reference/
+versioning:
+  scheme: uri-path
+  current: v1
+  base_path: /api/v1
+  docs: https://developers.fellow.ai/reference/introduction
+deprecation:
+  policy_url: null
+  sunset_header: false
+  notes: No formal deprecation/Sunset-header policy is published.
+availability:
+  requires: paid workspace plan; API enabled by a workspace admin under Security settings
+  audit_log_retention_days: 90
+sla:
+  url: null
+  uptime_target: null
+  notes: Server uptime monitoring is in place; a public SLA target is not published.
+status_page: https://status.fellow.ai/
+deprecated_operations: []
+notes: >-
+  Fellow exposes a single stable v1 REST surface plus a hosted MCP server. Status is
+  reported at status.fellow.ai. No published deprecation policy or Sunset-header
+  support at time of capture.

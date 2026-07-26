@@ -1,0 +1,170 @@
+# generated: '2026-07-19'
+# method: generated
+# source: https://developers.fellow.ai/reference/webhooks
+# spec_type: AsyncAPI
+# Faithfully generated from Fellow's published webhook documentation (event names,
+# payload fields, signing, and delivery semantics captured verbatim from the docs).
+asyncapi: 3.0.0
+info:
+  title: Fellow Webhooks
+  version: '1.0'
+  description: >-
+    Real-time webhook events delivered by Fellow when meeting AI notes and action
+    items change. Fellow POSTs JSON to a registered HTTPS endpoint. Deliveries are
+    svix-signed (HMAC-SHA256 over `{svix-id}.{svix-timestamp}.{body}` with headers
+    svix-id / svix-timestamp / svix-signature). New endpoints are proven via a
+    challenge-response `url_verification` handshake. Failed deliveries are retried
+    with exponential backoff (8 attempts over ~27h); endpoints failing for 5 days
+    are auto-disabled (status `failed`).
+  externalDocs:
+    url: https://developers.fellow.ai/reference/webhooks
+defaultContentType: application/json
+servers:
+  fellow:
+    host: your-endpoint.example.com
+    protocol: https
+    description: Your publicly reachable HTTPS webhook receiver (Fellow is the sender).
+channels:
+  webhook:
+    address: /
+    messages:
+      aiNoteGenerated:
+        $ref: '#/components/messages/aiNoteGenerated'
+      aiNoteSharedToChannel:
+        $ref: '#/components/messages/aiNoteSharedToChannel'
+      actionItemAssigned:
+        $ref: '#/components/messages/actionItemAssigned'
+      actionItemCompleted:
+        $ref: '#/components/messages/actionItemCompleted'
+      urlVerification:
+        $ref: '#/components/messages/urlVerification'
+operations:
+  receiveEvents:
+    action: receive
+    channel:
+      $ref: '#/channels/webhook'
+    messages:
+    - $ref: '#/channels/webhook/messages/aiNoteGenerated'
+    - $ref: '#/channels/webhook/messages/aiNoteSharedToChannel'
+    - $ref: '#/channels/webhook/messages/actionItemAssigned'
+    - $ref: '#/channels/webhook/messages/actionItemCompleted'
+components:
+  messages:
+    urlVerification:
+      name: url_verification
+      title: URL verification challenge
+      summary: Sent on webhook create/URL-update; echo the challenge string as plain text.
+      payload:
+        type: object
+        properties:
+          type:
+            type: string
+            const: url_verification
+          challenge:
+            type: string
+    aiNoteGenerated:
+      name: ai_note.generated
+      title: AI note generated
+      summary: Fellow generated AI notes from a meeting recording.
+      headers:
+        $ref: '#/components/schemas/svixHeaders'
+      payload:
+        $ref: '#/components/schemas/aiNotePayload'
+    aiNoteSharedToChannel:
+      name: ai_note.shared_to_channel
+      title: AI note shared to channel
+      summary: An AI-generated note was shared to a channel.
+      headers:
+        $ref: '#/components/schemas/svixHeaders'
+      payload:
+        allOf:
+        - $ref: '#/components/schemas/aiNotePayload'
+        - type: object
+          properties:
+            channel_id:
+              type: string
+    actionItemAssigned:
+      name: action_item.assigned
+      title: Action item assigned
+      summary: An action item was assigned to the user.
+      headers:
+        $ref: '#/components/schemas/svixHeaders'
+      payload:
+        type: object
+        properties:
+          event_type: { type: string, const: action_item.assigned }
+          id: { type: string }
+          text: { type: string }
+          assignees:
+            type: array
+            items:
+              type: object
+              properties:
+                id: { type: string }
+                full_name: { type: string }
+                email: { type: string, format: email }
+          completion_type: { type: string, enum: [any, all] }
+          status: { type: string, enum: [Incomplete, Done, Archived] }
+          due_date: { type: [string, 'null'], format: date }
+          note_id: { type: string }
+          ai_generated: { type: boolean }
+          created_at: { type: string, format: date-time }
+          updated_at: { type: string, format: date-time }
+    actionItemCompleted:
+      name: action_item.completed
+      title: Action item completed
+      summary: An action item was marked complete.
+      headers:
+        $ref: '#/components/schemas/svixHeaders'
+      payload:
+        type: object
+        properties:
+          event_type: { type: string, const: action_item.completed }
+          id: { type: string }
+          text: { type: string }
+          assignee_id: { type: string }
+          assignee_name: { type: string }
+          assignee_email: { type: string, format: email }
+          note_id: { type: string }
+          stream_id: { type: string }
+          stream_title: { type: string }
+          due_date: { type: [string, 'null'], format: date }
+          done: { type: boolean }
+          wont_do: { type: boolean }
+          event_id: { type: string }
+          event_title: { type: string }
+          event_start: { type: string, format: date-time }
+          event_end: { type: string, format: date-time }
+          ai_generated: { type: boolean }
+  schemas:
+    svixHeaders:
+      type: object
+      properties:
+        svix-id: { type: string, description: Unique message id (use for idempotency). }
+        svix-timestamp: { type: string, description: Unix timestamp when sent. }
+        svix-signature: { type: string, description: 'HMAC-SHA256 signature, format v1,<base64>.' }
+    aiNotePayload:
+      type: object
+      properties:
+        event_type: { type: string }
+        id: { type: string }
+        event_id: { type: string }
+        event_title: { type: string }
+        event_start: { type: string, format: date-time }
+        event_end: { type: string, format: date-time }
+        recording_start: { type: string, format: date-time }
+        recording_end: { type: string, format: date-time }
+        recap_url: { type: string, format: uri }
+        organizer_email: { type: string, format: email }
+        ai_notes: { type: string }
+        agenda_notes: { type: string }
+        has_external_attendees: { type: boolean }
+        transcript: { type: string }
+        is_user_who_started_recording: { type: boolean }
+        attendees:
+          type: array
+          items:
+            type: object
+            properties:
+              name: { type: string }
+              email: { type: string, format: email }

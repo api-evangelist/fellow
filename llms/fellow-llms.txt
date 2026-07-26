@@ -1,0 +1,34 @@
+# Fellow Documentation
+
+> Fellow’s API provides access to meeting notes and transcripts, making it easy to build custom tools or integrations that keep your team aligned.
+
+## API Reference
+- [Introduction](https://developers.fellow.ai/reference/introduction.md): Welcome to Fellow's Developer API!
+- [Authentication](https://developers.fellow.ai/reference/authentication-1.md)
+- [Super Admin](https://developers.fellow.ai/reference/super-admin.md): Advanced capabilities for compliance with data and privacy regulations
+- [MCP Server](https://developers.fellow.ai/reference/mcp-server.md): Fellow's Model Context Protocol (MCP) Server allows you to ask your AI Assistant about your meetings, without needing to write any code.
+- [Webhooks](https://developers.fellow.ai/reference/webhooks.md)
+- [Request limits](https://developers.fellow.ai/reference/request-limits.md)
+- [Status codes](https://developers.fellow.ai/reference/status-codes.md)
+- [Pagination](https://developers.fellow.ai/reference/pagination.md)
+- [Get Authenticated User](https://developers.fellow.ai/reference/apps_developer_api_api_get_authenticated_user.md): Get information about the authenticated user and their workspace.
+- [Recordings](https://developers.fellow.ai/reference/recordings.md)
+- [Retrieve Recording](https://developers.fellow.ai/reference/apps_developer_api_api_get_recording_by_id.md): Retrieve a recording by its ID.
+- [List Recordings](https://developers.fellow.ai/reference/apps_developer_api_api_get_recordings.md): List recordings with optional filters and pagination.
+- [Delete Recording](https://developers.fellow.ai/reference/apps_developer_api_api_delete_recording.md): Delete a recording by its ID.  **Super Admin Access Required**: This endpoint is restricted to API keys with privileged access. Only users with super admin privileges can delete recordings through the API.
+- [Upload Recording](https://developers.fellow.ai/reference/apps_developer_api_api_upload_recording.md): Upload a recording from a URL.
+- [Retrieve Uploaded Recording](https://developers.fellow.ai/reference/apps_developer_api_api_get_upload_by_id.md): Retrieve a single API-uploaded recording with its import status.
+- [List Uploaded Recordings](https://developers.fellow.ai/reference/apps_developer_api_api_list_uploads.md): List API-uploaded recordings and their statuses.
+- [Notes](https://developers.fellow.ai/reference/notes.md)
+- [Retrieve Note](https://developers.fellow.ai/reference/apps_developer_api_api_get_note_by_id.md): Retrieve a note by its ID.
+- [List Notes](https://developers.fellow.ai/reference/apps_developer_api_api_get_notes.md): List notes with optional filters and pagination. Privileged access allows you to get notes for the account. Non-privileged access allows you to get notes for the authenticated user only.
+- [Delete Note](https://developers.fellow.ai/reference/apps_developer_api_api_delete_note.md): Delete a note by its ID.  **Super Admin Access Required**: This endpoint is restricted to API keys with privileged access. Only users with super admin privileges can delete notes through the API.
+- [Retrieve Action Item](https://developers.fellow.ai/reference/apps_developer_api_api_get_action_item_by_id.md): Retrieve an action item by its ID.
+- [List Action Items](https://developers.fellow.ai/reference/apps_developer_api_api_get_action_items.md): List action items with optional filters and pagination. Privileged access allows you to get action items for the account. Non-privileged access allows you to get action items for the authenticated user only.  The `scope` filter controls which action items are returned: - (no scope - default): All action items the user has access to - assigned_to_me: Only action items assigned to the authenticated user - assigned_to_others: Only action items the user can edit, assigned to teammates
+- [Mark Action Item Complete](https://developers.fellow.ai/reference/apps_developer_api_api_mark_action_item_complete.md): Mark an action item as complete or incomplete.
+- [Archive Action Item](https://developers.fellow.ai/reference/apps_developer_api_api_archive_action_item.md): Archive an action item by marking it as won't do.
+- [Create Webhook](https://developers.fellow.ai/reference/apps_developer_api_api_create_webhook.md): Create a new webhook endpoint.  Creates a webhook that will receive HTTP POST requests when subscribed events occur. The webhook will be associated with the authenticated user.
+- [Retrieve Webhook](https://developers.fellow.ai/reference/apps_developer_api_api_get_webhook_by_id.md): Retrieve a webhook by its ID.
+- [Update Webhook](https://developers.fellow.ai/reference/apps_developer_api_api_update_webhook.md): Update an existing webhook endpoint.  Allows partial updates - only provided fields will be modified. The webhook must belong to the authenticated user (or account for privileged access).
+- [Delete Webhook](https://developers.fellow.ai/reference/apps_developer_api_api_delete_webhook.md): Delete a webhook endpoint by its ID.
+- [List Webhooks](https://developers.fellow.ai/reference/apps_developer_api_api_list_webhooks.md): List webhooks with optional filters and pagination.  Query Parameters: - page_size: Number of results per page (optional, default: 20, max: 50) - cursor: Pagination cursor for next page (optional) - filters: JSON-encoded WebhookFilters (optional)   Example: ?filters={"status":"active","created_at_start":"2024-01-01"}  Returns a list of webhooks for the authenticated user. Privileged access allows listing all webhooks for the account.

@@ -1,0 +1,35 @@
+generated: '2026-07-19'
+method: searched
+source: https://news.fellow.app/
+docs: https://news.fellow.app/
+scheme: dated-product-news
+current_api_version: v1
+notes: >-
+  Fellow publishes a dated product-news feed (news.fellow.app). It is product-wide,
+  not API-only; the developer-facing milestone was the "Webhooks + Action Items API"
+  launch. Recent window captured below (titles/dates verbatim).
+entries:
+- date: '2026-07-17'
+  title: You can now password-protect your meeting recaps and control who can access them.
+  api_related: false
+- date: '2026-06-30'
+  title: Create clips from audio-only and botless recordings.
+  api_related: false
+- date: '2026-06-29'
+  title: Unscheduled notes are back in the new Fellow UX.
+  api_related: false
+- date: '2026-06-29'
+  title: Control mobile recording independently from botless recording in workspace settings.
+  api_related: false
+- date: '2026-06-29'
+  title: 'New: Consent Capture for Auto-Recorded Microsoft Teams Meetings.'
+  api_related: false
+- date: '2026-06-02'
+  title: Record the right meeting every time.
+  api_related: false
+- title: 'Webhooks + Action Items API'
+  url: https://news.fellow.app/126772-webhooks-action-items-api
+  api_related: true
+  highlights:
+  - Developer API gains Webhooks for real-time event delivery.
+  - New Action Items API for programmatic task access and management.

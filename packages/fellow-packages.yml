@@ -1,0 +1,20 @@
+generated: '2026-07-19'
+method: searched
+source: https://github.com/fellowapp
+packages:
+- language: typescript
+  registry: github
+  name: "@fellow/n8n-nodes-fellow"
+  url: https://github.com/fellowapp/n8n-nodes-fellow
+  install: "clone github.com/fellowapp/n8n-nodes-fellow (not published to npm)"
+  official: true
+  kind: integration-node
+  description: The official Fellow n8n community node (workflow automation), source-only on GitHub.
+notes: >-
+  No first-party REST client SDK (JavaScript/Python/etc.) is published for the Fellow
+  Developer API — the docs point developers at raw REST calls with X-API-KEY. The
+  only official package found is the n8n automation node (@fellow/n8n-nodes-fellow),
+  which is an integration node, not a client SDK, so no `type: SDKs` pointer is
+  emitted. Third-party no-code connectors also exist (Make, Zapier, Linear) but are
+  not first-party. Registries probed: npm, PyPI, RubyGems, pkg.go.dev, Packagist,
+  crates.io, NuGet, Maven Central — no first-party client library found.

@@ -1,0 +1,43 @@
+generated: '2026-07-19'
+method: searched
+source: https://help.fellow.ai/en/articles/4302231-security-and-compliance
+standards:
+- id: soc2-type-ii
+  conforms: true
+  evidence: >-
+    SOC 2 Type II report covering the Security and Confidentiality criteria, valid
+    12 months, audited by AICPA-accredited third parties since 2020 (available under
+    NDA).
+- id: hipaa
+  conforms: true
+  evidence: Business Associate Agreements (BAAs) provided; encryption, access controls, audit logging for PHI.
+- id: gdpr
+  conforms: true
+  evidence: On-staff Data Protection Officer, GDPR-compliant DPAs, secure deletion protocol.
+- id: ccpa
+  conforms: true
+  evidence: Supports access, correction, and deletion requests per California requirements.
+- id: pci-dss
+  conforms: true
+  evidence: Payment processing delegated to Stripe (PCI compliance via Stripe).
+- id: oauth2
+  conforms: true
+  evidence: MCP server implements OAuth 2.0 authorization_code + PKCE (S256) per RFC 8414 metadata.
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: No /.well-known/security.txt published.
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: Errors use a custom {message, errors[]} JSON envelope, not application/problem+json.
+compliance_program:
+  encryption_at_rest: AES 256-bit
+  encryption_in_transit: HTTPS/TLS
+  hosting: AWS (Canada Central region)
+  pen_testing: Annual third-party penetration tests
+  vuln_scanning: Daily third-party vulnerability scans
+  static_analysis: SAST in CI/CD for backend systems and APIs
+  backups: AWS, 30-day retention, multi-AZ failover
+  trust_center: https://trust.fellow.ai/
+notes: >-
+  Published compliance posture (SOC 2 Type II, HIPAA/BAA, GDPR, CCPA, PCI via Stripe)
+  wired as `type: Compliance` in apis.yml; trust center as `type: TrustCenter`.

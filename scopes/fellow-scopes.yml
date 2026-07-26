@@ -1,0 +1,32 @@
+generated: '2026-07-19'
+method: searched
+source: https://fellow.app/.well-known/oauth-authorization-server
+docs: https://developers.fellow.ai/reference/mcp-server
+context: >-
+  Fellow's OAuth scopes apply to the hosted MCP server (https://fellow.app/mcp), not
+  the REST Developer API (which uses X-API-KEY). Scopes are advertised in the RFC
+  8414 OAuth 2.0 Authorization Server Metadata document.
+schemes:
+- name: MCPOAuth
+  source: well-known/fellow-oauth-authorization-server.json
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://fellow.app/mcp/authorize
+    tokenUrl: https://fellow.app/mcp/token
+    pkce: S256
+scopes:
+- scope: read_calendar
+  description: Read the user's calendar events.
+  flows: [authorizationCode]
+- scope: read_meeting_content
+  description: Read meeting content — AI notes, summaries, and transcripts.
+  flows: [authorizationCode]
+- scope: read_action_items
+  description: Read action items the user can access.
+  flows: [authorizationCode]
+- scope: read_channels
+  description: Read channels the user belongs to.
+  flows: [authorizationCode]
+- scope: write_meeting_agenda
+  description: Write/update meeting agenda content.
+  flows: [authorizationCode]

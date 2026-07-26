@@ -1,0 +1,20 @@
+generated: '2026-07-19'
+method: searched
+source: https://developers.fellow.ai/reference/request-limits
+docs: https://developers.fellow.ai/reference/request-limits
+scope: per-api-key
+error_code: rate_limited
+error_status: 429
+rate_limits:
+- name: Per-second limit
+  limit_count: 3
+  window: 1s
+  scope: per-api-key
+- name: Daily limit
+  limit_count: 10000
+  window: 1d
+  scope: per-api-key
+notes: >-
+  Rate limits are enforced on each API key. Rate-limited requests return error code
+  `rate_limited` with HTTP 429. Fellow states limits may change and that different
+  limits may be introduced per pricing plan.

@@ -1,0 +1,77 @@
+generated: '2026-07-19'
+method: derived
+source: https://developers.fellow.ai/reference/
+notes: >-
+  Entity graph derived from Fellow's documented REST operations and webhook payload
+  fields (no OpenAPI file was retrievable; entities and relationships are grounded in
+  the published reference and webhook schemas).
+entities:
+- name: User
+  description: The authenticated Fellow user (and their workspace).
+  operations: [apps_developer_api_api_get_authenticated_user]
+- name: Recording
+  description: A meeting recording with transcript and metadata.
+  id_examples: []
+  operations:
+  - apps_developer_api_api_get_recordings
+  - apps_developer_api_api_get_recording_by_id
+  - apps_developer_api_api_delete_recording
+  - apps_developer_api_api_upload_recording
+  - apps_developer_api_api_get_upload_by_id
+  - apps_developer_api_api_list_uploads
+- name: Note
+  description: A structured / AI-generated meeting note.
+  operations:
+  - apps_developer_api_api_get_notes
+  - apps_developer_api_api_get_note_by_id
+  - apps_developer_api_api_delete_note
+- name: ActionItem
+  description: A task captured from a meeting, with assignees and completion state.
+  operations:
+  - apps_developer_api_api_get_action_items
+  - apps_developer_api_api_get_action_item_by_id
+  - apps_developer_api_api_mark_action_item_complete
+  - apps_developer_api_api_archive_action_item
+- name: Webhook
+  description: A subscription that receives event POSTs.
+  operations:
+  - apps_developer_api_api_create_webhook
+  - apps_developer_api_api_list_webhooks
+  - apps_developer_api_api_get_webhook_by_id
+  - apps_developer_api_api_update_webhook
+  - apps_developer_api_api_delete_webhook
+- name: Event
+  description: The calendar meeting a recording/note/action item belongs to.
+- name: Channel
+  description: A space where notes are published/shared.
+- name: Attendee
+  description: A participant of a meeting event.
+relationships:
+- from: Note
+  to: ActionItem
+  type: has_many
+  via: note_id
+- from: ActionItem
+  to: Note
+  type: belongs_to
+  via: note_id
+- from: Recording
+  to: Event
+  type: belongs_to
+  via: event_id
+- from: Note
+  to: Event
+  type: belongs_to
+  via: event_id
+- from: ActionItem
+  to: User
+  type: has_many
+  via: assignees
+- from: Note
+  to: Channel
+  type: has_many
+  via: channel_id
+- from: Event
+  to: Attendee
+  type: has_many
+  via: attendees

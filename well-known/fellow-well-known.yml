@@ -1,0 +1,30 @@
+generated: '2026-07-19'
+method: searched
+source: https://fellow.app/.well-known/
+hosts:
+- host: https://fellow.app
+  documents:
+  - path: /.well-known/oauth-authorization-server   # RFC 8414 — MCP OAuth server metadata
+    status: 200
+    file: fellow-oauth-authorization-server.json
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/security.txt                  # RFC 9116
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+- host: https://developers.fellow.ai
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+- host: https://fellow.ai
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+notes: >-
+  The only positive /.well-known/ document is the RFC 8414 OAuth 2.0 Authorization
+  Server Metadata for Fellow's hosted MCP server (issuer https://fellow.app), which
+  advertises authorization/token/register/revoke endpoints, PKCE (S256), and five
+  OAuth scopes. No security.txt, OIDC discovery, ai-plugin, or api-catalog published.
