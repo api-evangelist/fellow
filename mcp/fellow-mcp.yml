@@ -8,7 +8,9 @@ server:
   url: https://fellow.app/mcp
   auth:
     type: oauth2
-    grant_types: [authorization_code, refresh_token]
+    grant_types:
+    - authorization_code
+    - refresh_token
     pkce: S256
     authorization_endpoint: https://fellow.app/mcp/authorize
     token_endpoint: https://fellow.app/mcp/token
@@ -21,11 +23,9 @@ server:
     - read_action_items
     - read_channels
     - write_meeting_agenda
-access: >-
-  Read-only over the data the authenticating user can already see in Fellow. A
-  workspace admin must first enable MCP connections (Workspace Settings -> Security
-  -> Allow users to create MCP connections). Works with any MCP client (Claude,
-  ChatGPT, Cursor).
+access: Read-only over the data the authenticating user can already see in Fellow. A workspace admin must
+  first enable MCP connections (Workspace Settings -> Security -> Allow users to create MCP connections).
+  Works with any MCP client (Claude, ChatGPT, Cursor).
 tools:
 - name: get_action_items
   description: Get action items.
@@ -37,6 +37,12 @@ tools:
   description: Get meeting transcript.
 - name: search_meetings
   description: Search meetings.
-notes: >-
-  Officially published, hosted remote MCP server documented by Fellow. Tool list and
-  scopes captured verbatim from the docs and the RFC 8414 metadata document.
+notes: Officially published, hosted remote MCP server documented by Fellow. Tool list and scopes captured
+  verbatim from the docs and the RFC 8414 metadata document.
+deployment:
+  mode: remote
+  endpoint: https://fellow.app/mcp
+  verified: probed
+  probe: gated
+  checked: '2026-08-12'
+  source: catalog MCP census
