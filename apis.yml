@@ -38,6 +38,17 @@ modified: '2026-07-19'
 image: https://framerusercontent.com/assets/J0X2qL3rwf819TDwjCc8iG9UjUk.png
 tags:
 - Company
+- Software-as-a-Service
+- Meetings
+- Artificial Intelligence
+- Meeting Notes
+- Transcription
+- Productivity
+- Action Items
+- Webhook
+- MCP
+tags_raw:
+- Company
 - Saas
 - Meetings
 - AI
@@ -58,6 +69,12 @@ apis:
   humanURL: https://developers.fellow.ai/
   baseURL: https://{subdomain}.fellow.app/api/v1
   tags:
+  - Meetings
+  - Transcription
+  - Notes
+  - Action Items
+  - Webhook
+  tags_raw:
   - Meetings
   - Transcription
   - Notes
