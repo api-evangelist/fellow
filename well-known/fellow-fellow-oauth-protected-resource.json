@@ -1,0 +1,1 @@
+{"resource": "https://fellow.app/mcp", "authorization_servers": ["https://fellow.app"], "scopes_supported": ["read_calendar", "read_meeting_content", "read_action_items", "read_channels", "write_meeting_agenda"], "bearer_methods_supported": ["header"]}

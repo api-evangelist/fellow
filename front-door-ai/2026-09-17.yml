@@ -1,0 +1,33 @@
+# Front Door AI Index — fellow — 2026-09-17
+# AI vocabulary counted on the provider's root page. Generated; do not edit.
+# `score` is null unless ownership is `own` — see front_door_ai.py.
+front_door_ai:
+  slug: fellow
+  lexicon_version: '1.0'
+  probed_at: '2026-09-17'
+  host: fellow.ai
+  final_host: fellow.ai
+  ownership: own
+  owner: fellow
+  shares_host_with: null
+  inherited_from: null
+  verdict: scored
+  score: 55
+  host_score: 55
+  density: 27.25
+  words: 2018
+  tiers:
+    agentic: 3
+    core: 48
+    model: 4
+  ambiguous: 8
+  top_terms:
+    AI: 48
+    intelligence: 6
+    Claude: 3
+    ChatGPT: 1
+    MCP: 1
+    agent: 1
+    agentic: 1
+    automation: 1
+    model context protocol: 1
