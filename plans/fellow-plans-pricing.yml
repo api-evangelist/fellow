@@ -1,0 +1,67 @@
+# Pricing transcribed from the provider's own page — see provenance. Numbers are quoted, not derived.
+generated: '2026-10-07'
+method: searched
+source: https://fellow.ai/pricing
+sources:
+- https://fellow.ai/pricing
+provenance:
+  tool: all/0-working/economics/harvest_pricing.py
+  run: 20261007T104522
+  grounding: every price_text was found verbatim in the fetched page text
+audience: business-product
+pricing_basis: per-seat
+delivery:
+  delivery: managed
+  method: page
+  read: '2026-10-07'
+  managed_tier: Team
+published: true
+note: Seat-based SaaS tiers for an AI meeting assistant; API access listed as a plan feature, not separately
+  priced. Enterprise shows a price plus 'Contact sales'.
+plan_count: 6
+currency: USD
+plans:
+- name: Free
+  price_text: $0 per user / month billed annually
+  price: 0
+  currency: USD
+  period: month
+  unit: per user
+  included_quota: 5 AI notes (lifetime) / user, 5 AI recordings (lifetime) / user; max 5 seats
+- name: Team
+  price_text: $7 per user / month billed annually
+  price: 7
+  currency: USD
+  period: month
+  unit: per user
+  included_quota: 10 AI notes / user / month, 10 AI recordings / user; API access; max 20 seats
+- name: Team (monthly)
+  price_text: $11 billed monthly
+  price: 11
+  currency: USD
+  period: month
+  unit: per user
+- name: Business
+  price_text: $15 per user / month billed annually
+  price: 15
+  currency: USD
+  period: month
+  unit: per user
+  included_quota: Unlimited AI notes and recordings; API access; max 50 seats
+- name: Business (monthly)
+  price_text: $23 billed monthly
+  price: 23
+  currency: USD
+  period: month
+  unit: per user
+- name: Enterprise
+  price_text: $25 per user / month billed annually
+  price: 25
+  currency: USD
+  period: month
+  unit: per user
+  included_quota: Starts at 10 users; unlimited; API access
+rate_limit_statements:
+- Maximum seats 5 20 50 Unlimited
+- Audio and video uploads 5 per user lifetime 10/user/month 50/user/month 50/user/month
+- Maximum 20h of meetings
