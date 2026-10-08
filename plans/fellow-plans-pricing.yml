@@ -65,3 +65,60 @@ rate_limit_statements:
 - Maximum seats 5 20 50 Unlimited
 - Audio and video uploads 5 per user lifetime 10/user/month 50/user/month 50/user/month
 - Maximum 20h of meetings
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - free
+  - seat
+  units:
+  - seat
+  plans:
+  - name: Free
+    access: other
+    model: free
+    model_how: derived
+    units:
+    - seat
+    periods:
+    - month
+  - name: Team
+    access: other
+    model: seat
+    model_how: derived
+    units:
+    - seat
+    periods:
+    - month
+  - name: Team (monthly)
+    access: other
+    model: seat
+    model_how: derived
+    units:
+    - seat
+    periods:
+    - month
+  - name: Business
+    access: other
+    model: seat
+    model_how: derived
+    units:
+    - seat
+    periods:
+    - month
+  - name: Business (monthly)
+    access: other
+    model: seat
+    model_how: derived
+    units:
+    - seat
+    periods:
+    - month
+  - name: Enterprise
+    access: other
+    model: seat
+    model_how: derived
+    units:
+    - seat
+    periods:
+    - month
