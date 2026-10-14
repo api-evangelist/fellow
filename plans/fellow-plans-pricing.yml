@@ -2,6 +2,7 @@
 generated: '2026-10-07'
 method: searched
 source: https://fellow.ai/pricing
+name: Fellow API Plans
 sources:
 - https://fellow.ai/pricing
 provenance:

@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/fellow/main/json-schema/fellow-find-replace-note-agenda-request-schema.json",
+  "title": "FindReplaceNoteAgendaRequest",
+  "description": "Request body for replacing a single occurrence of text in a note's agenda.",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/fellow-developer-api-openapi.yml#/components/schemas/FindReplaceNoteAgendaRequest",
+  "properties": {
+    "find": {
+      "description": "Existing agenda text to replace. Must appear exactly once, or the request is rejected.",
+      "minLength": 1,
+      "title": "Find",
+      "type": "string"
+    },
+    "content_fellow_markdown": {
+      "description": "Fellow Markdown to substitute for the matched text, in the same format the note object's content_fellow_markdown field returns. An empty string deletes the matched text.",
+      "title": "Content Fellow Markdown",
+      "type": "string"
+    }
+  },
+  "required": [
+    "find",
+    "content_fellow_markdown"
+  ],
+  "type": "object"
+}

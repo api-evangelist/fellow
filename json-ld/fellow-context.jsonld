@@ -1,0 +1,438 @@
+{
+  "@context": {
+    "@vocab": "https://fellow.ai/schema#",
+    "schema": "https://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "fellow": "https://fellow.ai/schema#",
+    "AuthenticatedUserResponse": "fellow:AuthenticatedUserResponse",
+    "user": {
+      "@id": "fellow:user",
+      "@type": "@id"
+    },
+    "workspace": {
+      "@id": "fellow:workspace",
+      "@type": "@id"
+    },
+    "UserInfo": "fellow:UserInfo",
+    "id": {
+      "@id": "fellow:id",
+      "@type": "xsd:string"
+    },
+    "email": {
+      "@id": "fellow:email",
+      "@type": "xsd:string"
+    },
+    "full_name": {
+      "@id": "fellow:full_name",
+      "@type": "xsd:string"
+    },
+    "WorkspaceInfo": "fellow:WorkspaceInfo",
+    "name": {
+      "@id": "fellow:name",
+      "@type": "xsd:string"
+    },
+    "subdomain": {
+      "@id": "fellow:subdomain",
+      "@type": "xsd:string"
+    },
+    "ActionItemAssignee": "fellow:ActionItemAssignee",
+    "ActionItemStatus": "fellow:ActionItemStatus",
+    "Recording": "fellow:Recording",
+    "title": {
+      "@id": "fellow:title",
+      "@type": "xsd:string"
+    },
+    "created_at": {
+      "@id": "fellow:created_at",
+      "@type": "xsd:dateTime"
+    },
+    "updated_at": {
+      "@id": "fellow:updated_at",
+      "@type": "xsd:dateTime"
+    },
+    "started_at": {
+      "@id": "fellow:started_at",
+      "@type": "xsd:dateTime"
+    },
+    "ended_at": {
+      "@id": "fellow:ended_at",
+      "@type": "xsd:dateTime"
+    },
+    "event_call_url": {
+      "@id": "fellow:event_call_url",
+      "@type": "xsd:string"
+    },
+    "event_guid": {
+      "@id": "fellow:event_guid",
+      "@type": "xsd:string"
+    },
+    "note_id": {
+      "@id": "fellow:note_id",
+      "@type": "xsd:string"
+    },
+    "user_has_calendar_event": {
+      "@id": "fellow:user_has_calendar_event",
+      "@type": "xsd:boolean"
+    },
+    "transcript": {
+      "@id": "fellow:transcript"
+    },
+    "ai_notes": {
+      "@id": "fellow:ai_notes",
+      "@container": "@list"
+    },
+    "media_url": {
+      "@id": "fellow:media_url",
+      "@type": "xsd:string"
+    },
+    "RecordingResponse": "fellow:RecordingResponse",
+    "recording": {
+      "@id": "fellow:recording",
+      "@type": "@id"
+    },
+    "Recap": "fellow:Recap",
+    "is_active": {
+      "@id": "fellow:is_active",
+      "@type": "xsd:boolean"
+    },
+    "template_creator": {
+      "@id": "fellow:template_creator",
+      "@type": "xsd:string"
+    },
+    "sections": {
+      "@id": "fellow:sections",
+      "@container": "@list"
+    },
+    "RecapActionItem": "fellow:RecapActionItem",
+    "timestamp": {
+      "@id": "fellow:timestamp",
+      "@type": "xsd:integer"
+    },
+    "text": {
+      "@id": "fellow:text",
+      "@type": "xsd:string"
+    },
+    "assignees": {
+      "@id": "fellow:assignees",
+      "@container": "@list"
+    },
+    "completion_type": {
+      "@id": "fellow:completion_type",
+      "@type": "xsd:string"
+    },
+    "due_date": {
+      "@id": "fellow:due_date",
+      "@type": "xsd:string"
+    },
+    "accepted": {
+      "@id": "fellow:accepted",
+      "@type": "xsd:boolean"
+    },
+    "status": {
+      "@id": "fellow:status",
+      "@type": "@id"
+    },
+    "RecapBulletPoint": "fellow:RecapBulletPoint",
+    "RecapDecision": "fellow:RecapDecision",
+    "RecapKeyMoment": "fellow:RecapKeyMoment",
+    "RecapTemplateSection": "fellow:RecapTemplateSection",
+    "type": {
+      "@id": "fellow:type",
+      "@type": "@id"
+    },
+    "content": {
+      "@id": "fellow:content"
+    },
+    "RecapTemplateSectionType": "fellow:RecapTemplateSectionType",
+    "RecapTopic": "fellow:RecapTopic",
+    "bullet_points": {
+      "@id": "fellow:bullet_points",
+      "@container": "@list"
+    },
+    "Transcript": "fellow:Transcript",
+    "speech_segments": {
+      "@id": "fellow:speech_segments",
+      "@container": "@list"
+    },
+    "language_code": {
+      "@id": "fellow:language_code",
+      "@type": "xsd:string"
+    },
+    "TranscriptSegment": "fellow:TranscriptSegment",
+    "start": {
+      "@id": "fellow:start",
+      "@type": "xsd:decimal"
+    },
+    "end": {
+      "@id": "fellow:end",
+      "@type": "xsd:decimal"
+    },
+    "speaker": {
+      "@id": "fellow:speaker",
+      "@type": "xsd:string"
+    },
+    "PageInfo": "fellow:PageInfo",
+    "cursor": {
+      "@id": "fellow:cursor",
+      "@type": "xsd:string"
+    },
+    "page_size": {
+      "@id": "fellow:page_size",
+      "@type": "xsd:integer"
+    },
+    "PaginatedRequestParams": "fellow:PaginatedRequestParams",
+    "PaginatedResponse_Recording_": "fellow:PaginatedResponse_Recording_",
+    "page_info": {
+      "@id": "fellow:page_info",
+      "@type": "@id"
+    },
+    "data": {
+      "@id": "fellow:data",
+      "@container": "@list"
+    },
+    "RecordingsListResponse": "fellow:RecordingsListResponse",
+    "recordings": {
+      "@id": "fellow:recordings",
+      "@type": "@id"
+    },
+    "GetRecordingsRequest": "fellow:GetRecordingsRequest",
+    "pagination": {
+      "@id": "fellow:pagination"
+    },
+    "include": {
+      "@id": "fellow:include"
+    },
+    "filters": {
+      "@id": "fellow:filters"
+    },
+    "MediaUrlConfig": "fellow:MediaUrlConfig",
+    "expire_in": {
+      "@id": "fellow:expire_in",
+      "@type": "xsd:integer"
+    },
+    "RecordingFilters": "fellow:RecordingFilters",
+    "created_at_start": {
+      "@id": "fellow:created_at_start",
+      "@type": "xsd:string"
+    },
+    "created_at_end": {
+      "@id": "fellow:created_at_end",
+      "@type": "xsd:string"
+    },
+    "updated_at_start": {
+      "@id": "fellow:updated_at_start",
+      "@type": "xsd:string"
+    },
+    "updated_at_end": {
+      "@id": "fellow:updated_at_end",
+      "@type": "xsd:string"
+    },
+    "channel_id": {
+      "@id": "fellow:channel_id",
+      "@type": "xsd:string"
+    },
+    "RecordingIncludableExpensiveField": "fellow:RecordingIncludableExpensiveField",
+    "MessageResponse": "fellow:MessageResponse",
+    "message": {
+      "@id": "fellow:message",
+      "@type": "xsd:string"
+    },
+    "RecordingUploadSubmitResponse": "fellow:RecordingUploadSubmitResponse",
+    "recording_id": {
+      "@id": "fellow:recording_id",
+      "@type": "xsd:string"
+    },
+    "BasicAuth": "fellow:BasicAuth",
+    "username": {
+      "@id": "fellow:username",
+      "@type": "xsd:string"
+    },
+    "password": {
+      "@id": "fellow:password",
+      "@type": "xsd:string"
+    },
+    "BearerTokenAuth": "fellow:BearerTokenAuth",
+    "token": {
+      "@id": "fellow:token",
+      "@type": "xsd:string"
+    },
+    "RecordingUploadRequest": "fellow:RecordingUploadRequest",
+    "url": {
+      "@id": "fellow:url",
+      "@type": "@id"
+    },
+    "media_auth": {
+      "@id": "fellow:media_auth"
+    },
+    "TranscriptionLanguage": "fellow:TranscriptionLanguage",
+    "RecordingUpload": "fellow:RecordingUpload",
+    "failure_reason": {
+      "@id": "fellow:failure_reason",
+      "@type": "xsd:string"
+    },
+    "Status": "fellow:Status",
+    "RecordingUploadResponse": "fellow:RecordingUploadResponse",
+    "upload": {
+      "@id": "fellow:upload",
+      "@type": "@id"
+    },
+    "PaginatedResponse_RecordingUpload_": "fellow:PaginatedResponse_RecordingUpload_",
+    "RecordingUploadsListResponse": "fellow:RecordingUploadsListResponse",
+    "uploads": {
+      "@id": "fellow:uploads",
+      "@type": "@id"
+    },
+    "GetUploadsRequest": "fellow:GetUploadsRequest",
+    "UploadFilters": "fellow:UploadFilters",
+    "Attendee": "fellow:Attendee",
+    "Note": "fellow:Note",
+    "event_start": {
+      "@id": "fellow:event_start",
+      "@type": "xsd:dateTime"
+    },
+    "event_end": {
+      "@id": "fellow:event_end",
+      "@type": "xsd:dateTime"
+    },
+    "event_is_all_day": {
+      "@id": "fellow:event_is_all_day",
+      "@type": "xsd:boolean"
+    },
+    "recording_ids": {
+      "@id": "fellow:recording_ids",
+      "@container": "@list"
+    },
+    "event_attendees": {
+      "@id": "fellow:event_attendees",
+      "@container": "@list"
+    },
+    "organizer_email": {
+      "@id": "fellow:organizer_email",
+      "@type": "xsd:string"
+    },
+    "content_markdown": {
+      "@id": "fellow:content_markdown",
+      "@type": "xsd:string"
+    },
+    "content_fellow_markdown": {
+      "@id": "fellow:content_fellow_markdown",
+      "@type": "xsd:string"
+    },
+    "NoteResponse": "fellow:NoteResponse",
+    "note": {
+      "@id": "fellow:note",
+      "@type": "@id"
+    },
+    "NotesListResponse": "fellow:NotesListResponse",
+    "notes": {
+      "@id": "fellow:notes",
+      "@type": "@id"
+    },
+    "PaginatedResponse_Note_": "fellow:PaginatedResponse_Note_",
+    "GetNotesRequest": "fellow:GetNotesRequest",
+    "NoteFilters": "fellow:NoteFilters",
+    "NoteIncludableExpensiveField": "fellow:NoteIncludableExpensiveField",
+    "NoteAgenda": "fellow:NoteAgenda",
+    "NoteAgendaResponse": "fellow:NoteAgendaResponse",
+    "agenda": {
+      "@id": "fellow:agenda",
+      "@type": "@id"
+    },
+    "PrependNoteAgendaRequest": "fellow:PrependNoteAgendaRequest",
+    "AppendNoteAgendaRequest": "fellow:AppendNoteAgendaRequest",
+    "FindReplaceNoteAgendaRequest": "fellow:FindReplaceNoteAgendaRequest",
+    "find": {
+      "@id": "fellow:find",
+      "@type": "xsd:string"
+    },
+    "WriteNoteAgendaRequest": "fellow:WriteNoteAgendaRequest",
+    "ActionItem": "fellow:ActionItem",
+    "ai_detected": {
+      "@id": "fellow:ai_detected",
+      "@type": "xsd:boolean"
+    },
+    "recording_offset": {
+      "@id": "fellow:recording_offset",
+      "@type": "xsd:decimal"
+    },
+    "ai_suggestion_accepted_by_user": {
+      "@id": "fellow:ai_suggestion_accepted_by_user",
+      "@type": "xsd:boolean"
+    },
+    "ActionItemResponse": "fellow:ActionItemResponse",
+    "action_item": {
+      "@id": "fellow:action_item",
+      "@type": "@id"
+    },
+    "ActionItemsListResponse": "fellow:ActionItemsListResponse",
+    "action_items": {
+      "@id": "fellow:action_items",
+      "@type": "@id"
+    },
+    "PaginatedResponse_ActionItem_": "fellow:PaginatedResponse_ActionItem_",
+    "ActionItemFilters": "fellow:ActionItemFilters",
+    "completed": {
+      "@id": "fellow:completed",
+      "@type": "xsd:boolean"
+    },
+    "archived": {
+      "@id": "fellow:archived",
+      "@type": "xsd:boolean"
+    },
+    "scope": {
+      "@id": "fellow:scope",
+      "@type": "xsd:string"
+    },
+    "ActionItemOrderBy": "fellow:ActionItemOrderBy",
+    "GetActionItemsRequest": "fellow:GetActionItemsRequest",
+    "order_by": {
+      "@id": "fellow:order_by"
+    },
+    "MarkActionItemCompleteRequest": "fellow:MarkActionItemCompleteRequest",
+    "WebhookCreateResponse": "fellow:WebhookCreateResponse",
+    "webhook": {
+      "@id": "fellow:webhook",
+      "@type": "@id"
+    },
+    "WebhookWithSecret": "fellow:WebhookWithSecret",
+    "description": {
+      "@id": "fellow:description",
+      "@type": "xsd:string"
+    },
+    "enabled_events": {
+      "@id": "fellow:enabled_events",
+      "@container": "@list"
+    },
+    "secret": {
+      "@id": "fellow:secret",
+      "@type": "xsd:string"
+    },
+    "CreateWebhookRequest": "fellow:CreateWebhookRequest",
+    "Webhook": "fellow:Webhook",
+    "WebhookResponse": "fellow:WebhookResponse",
+    "UpdateWebhookRequest": "fellow:UpdateWebhookRequest",
+    "WebhookDeleteResponse": "fellow:WebhookDeleteResponse",
+    "webhook_id": {
+      "@id": "fellow:webhook_id",
+      "@type": "xsd:string"
+    },
+    "deleted": {
+      "@id": "fellow:deleted",
+      "@type": "xsd:boolean"
+    },
+    "PaginatedResponse_Webhook_": "fellow:PaginatedResponse_Webhook_",
+    "WebhooksListResponse": "fellow:WebhooksListResponse",
+    "webhooks": {
+      "@id": "fellow:webhooks",
+      "@type": "@id"
+    }
+  },
+  "@type": "schema:Dataset",
+  "schema:name": "Fellow API JSON-LD context",
+  "schema:description": "A JSON-LD @context for the objects Fellow's own API contract declares: one class per component schema, one property per declared field, typed from the contract. Derived by script (derive-json-ld.py, 2026-10-14) from openapi/fellow-developer-api-openapi.yml.",
+  "dcterms:created": "2026-10-14",
+  "dcterms:source": [
+    "openapi/fellow-developer-api-openapi.yml"
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/fellow/main/json-schema/fellow-update-webhook-request-schema.json",
+  "title": "UpdateWebhookRequest",
+  "description": "Request body for updating a webhook. All fields are optional.",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/fellow-developer-api-openapi.yml#/components/schemas/UpdateWebhookRequest",
+  "properties": {
+    "url": {
+      "description": "The URL endpoint that will receive webhook POST requests",
+      "title": "Url",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "enabled_events": {
+      "description": "List of event types to subscribe to. Valid values: 'ai_note.shared_to_channel', 'ai_note.generated', 'action_item.assigned', 'action_item.completed'.",
+      "items": {
+        "type": "string"
+      },
+      "title": "Enabled Events",
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "description": {
+      "description": "Optional description for this webhook endpoint",
+      "title": "Description",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "status": {
+      "description": "Webhook status. Valid values: 'active', 'inactive'",
+      "enum": [
+        "active",
+        "inactive"
+      ],
+      "title": "Status",
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "type": "object"
+}

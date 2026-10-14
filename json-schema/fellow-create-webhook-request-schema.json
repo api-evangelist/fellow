@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/fellow/main/json-schema/fellow-create-webhook-request-schema.json",
+  "title": "CreateWebhookRequest",
+  "description": "Request body for creating a webhook.",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/fellow-developer-api-openapi.yml#/components/schemas/CreateWebhookRequest",
+  "properties": {
+    "url": {
+      "description": "The URL endpoint that will receive webhook POST requests",
+      "title": "Url",
+      "type": "string"
+    },
+    "enabled_events": {
+      "description": "List of event types to subscribe to. Valid values: 'ai_note.shared_to_channel', 'ai_note.generated', 'action_item.assigned', 'action_item.completed'.",
+      "items": {
+        "type": "string"
+      },
+      "title": "Enabled Events",
+      "type": "array"
+    },
+    "description": {
+      "default": "",
+      "description": "Optional description for this webhook endpoint",
+      "title": "Description",
+      "type": "string"
+    },
+    "status": {
+      "default": "active",
+      "description": "Webhook status. Valid values: 'active', 'inactive'",
+      "enum": [
+        "active",
+        "inactive"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "scope": {
+      "default": "user",
+      "description": "Who the webhook belongs to. 'user' is the authenticated user, the default and the existing behaviour. 'workspace' is the whole account: it receives every matching event with no per-user filter, and each event is delivered once rather than once per attendee. Creating one requires a privileged API key.",
+      "enum": [
+        "user",
+        "workspace"
+      ],
+      "title": "Scope",
+      "type": "string"
+    }
+  },
+  "required": [
+    "url",
+    "enabled_events"
+  ],
+  "type": "object"
+}

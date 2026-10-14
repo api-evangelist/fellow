@@ -1,6 +1,7 @@
 generated: '2026-07-19'
 method: searched
 source: https://developers.fellow.ai/reference/request-limits
+name: Fellow API Rate Limits
 docs: https://developers.fellow.ai/reference/request-limits
 scope: per-api-key
 error_code: rate_limited

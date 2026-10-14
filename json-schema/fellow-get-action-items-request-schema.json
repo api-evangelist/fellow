@@ -1,0 +1,165 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/fellow/main/json-schema/fellow-get-action-items-request-schema.json",
+  "title": "GetActionItemsRequest",
+  "description": "Request body for getting action items with optional filters and pagination.",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/fellow-developer-api-openapi.yml#/components/schemas/GetActionItemsRequest",
+  "properties": {
+    "pagination": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/PaginatedRequestParams",
+          "nullable": true
+        }
+      ]
+    },
+    "include": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/ActionItemIncludableExpensiveField",
+          "nullable": true
+        }
+      ]
+    },
+    "order_by": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/ActionItemOrderBy",
+          "nullable": true
+        }
+      ],
+      "description": "Sort order for action items. Valid values: 'created_at_desc' (default, newest first), 'created_at_asc' (oldest first), 'updated_at_desc' (most recently updated first), 'updated_at_asc' (least recently updated first), 'due_date' (soonest due date first, items without due dates appear last)"
+    },
+    "filters": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/ActionItemFilters",
+          "nullable": true
+        }
+      ]
+    }
+  },
+  "type": "object",
+  "$defs": {
+    "ActionItemFilters": {
+      "properties": {
+        "created_at_start": {
+          "description": "Only return action items created at or after this date. Accepts YYYY-MM-DD or an ISO datetime, and is inclusive. A value without a time means midnight UTC, so an end bound of 2024-01-05 excludes everything later that day.",
+          "title": "Created At Start",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "created_at_end": {
+          "description": "Only return action items created at or before this date. Accepts YYYY-MM-DD or an ISO datetime, and is inclusive. A value without a time means midnight UTC, so an end bound of 2024-01-05 excludes everything later that day.",
+          "title": "Created At End",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "updated_at_start": {
+          "description": "Only return action items updated at or after this date. Accepts YYYY-MM-DD or an ISO datetime, and is inclusive. A value without a time means midnight UTC, so an end bound of 2024-01-05 excludes everything later that day. Whether updated_at moves depends on where the change was made. Edits in the note itself, including its text, completion, assignees and due date, all bump updated_at. An assignee or due date changed outside the note, such as from the action items list, is written to a separate record and leaves updated_at unchanged, so this filter does not pick that item up.",
+          "title": "Updated At Start",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "updated_at_end": {
+          "description": "Only return action items updated at or before this date. Accepts YYYY-MM-DD or an ISO datetime, and is inclusive. A value without a time means midnight UTC, so an end bound of 2024-01-05 excludes everything later that day. Whether updated_at moves depends on where the change was made. Edits in the note itself, including its text, completion, assignees and due date, all bump updated_at. An assignee or due date changed outside the note, such as from the action items list, is written to a separate record and leaves updated_at unchanged, so this filter does not pick that item up.",
+          "title": "Updated At End",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "completed": {
+          "title": "Completed",
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "archived": {
+          "title": "Archived",
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "ai_detected": {
+          "title": "Ai Detected",
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "ai_suggestion_accepted_by_user": {
+          "title": "Ai Suggestion Accepted By User",
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "scope": {
+          "enum": [
+            "assigned_to_me",
+            "assigned_to_others",
+            "all"
+          ],
+          "title": "Scope",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "title": "ActionItemFilters",
+      "type": "object"
+    },
+    "ActionItemIncludableExpensiveField": {
+      "properties": {},
+      "title": "ActionItemIncludableExpensiveField",
+      "type": "object"
+    },
+    "ActionItemOrderBy": {
+      "description": "Supported ordering options for action items.",
+      "enum": [
+        "created_at_desc",
+        "created_at_asc",
+        "updated_at_desc",
+        "updated_at_asc",
+        "due_date"
+      ],
+      "title": "ActionItemOrderBy",
+      "type": "string"
+    },
+    "PaginatedRequestParams": {
+      "description": "Parameters sent in a request to paginate a queryset.",
+      "properties": {
+        "cursor": {
+          "title": "Cursor",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "page_size": {
+          "default": 20,
+          "exclusiveMinimum": 0,
+          "maximum": 50,
+          "minimum": 1,
+          "title": "Page Size",
+          "type": "integer"
+        }
+      },
+      "title": "PaginatedRequestParams",
+      "type": "object"
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/fellow/main/json-schema/fellow-write-note-agenda-request-schema.json",
+  "title": "WriteNoteAgendaRequest",
+  "description": "Request body for writing a note's agenda and/or renaming the note.",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/fellow-developer-api-openapi.yml#/components/schemas/WriteNoteAgendaRequest",
+  "properties": {
+    "content_fellow_markdown": {
+      "description": "The full agenda body in Fellow Markdown, the same format the note object's content_fellow_markdown field returns. When provided, replaces the existing agenda content.",
+      "title": "Content Fellow Markdown",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "title": {
+      "description": "New title for the note. When provided, renames the note.",
+      "title": "Title",
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "type": "object"
+}

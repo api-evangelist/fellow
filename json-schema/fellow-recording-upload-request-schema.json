@@ -1,0 +1,217 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/fellow/main/json-schema/fellow-recording-upload-request-schema.json",
+  "title": "RecordingUploadRequest",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/fellow-developer-api-openapi.yml#/components/schemas/RecordingUploadRequest",
+  "properties": {
+    "url": {
+      "format": "uri",
+      "minLength": 1,
+      "title": "Url",
+      "type": "string"
+    },
+    "title": {
+      "maxLength": 255,
+      "title": "Title",
+      "type": "string"
+    },
+    "language_code": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/TranscriptionLanguage",
+          "nullable": true
+        }
+      ]
+    },
+    "media_auth": {
+      "nullable": true,
+      "oneOf": [
+        {
+          "$ref": "#/$defs/BearerTokenAuth"
+        },
+        {
+          "$ref": "#/$defs/BasicAuth"
+        }
+      ],
+      "title": "Media Auth"
+    },
+    "channel_id": {
+      "title": "Channel Id",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "event_guid": {
+      "title": "Event Guid",
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "url",
+    "title"
+  ],
+  "type": "object",
+  "$defs": {
+    "BasicAuth": {
+      "properties": {
+        "type": {
+          "const": "basic_auth",
+          "default": "basic_auth",
+          "title": "Type",
+          "type": "string"
+        },
+        "username": {
+          "minLength": 1,
+          "title": "Username",
+          "type": "string"
+        },
+        "password": {
+          "title": "Password",
+          "type": "string"
+        }
+      },
+      "required": [
+        "username",
+        "password"
+      ],
+      "title": "BasicAuth",
+      "type": "object"
+    },
+    "BearerTokenAuth": {
+      "properties": {
+        "type": {
+          "const": "bearer_token",
+          "default": "bearer_token",
+          "title": "Type",
+          "type": "string"
+        },
+        "token": {
+          "minLength": 1,
+          "title": "Token",
+          "type": "string"
+        }
+      },
+      "required": [
+        "token"
+      ],
+      "title": "BearerTokenAuth",
+      "type": "object"
+    },
+    "TranscriptionLanguage": {
+      "enum": [
+        "en",
+        "en_au",
+        "en_uk",
+        "en_us",
+        "es",
+        "fr",
+        "de",
+        "it",
+        "pt",
+        "nl",
+        "hi",
+        "ja",
+        "zh",
+        "fi",
+        "ko",
+        "pl",
+        "ru",
+        "tr",
+        "uk",
+        "vi",
+        "af",
+        "sq",
+        "am",
+        "ar",
+        "hy",
+        "as",
+        "az",
+        "ba",
+        "eu",
+        "be",
+        "bn",
+        "bs",
+        "br",
+        "bg",
+        "my",
+        "ca",
+        "hr",
+        "cs",
+        "da",
+        "et",
+        "fo",
+        "gl",
+        "ka",
+        "el",
+        "gu",
+        "ht",
+        "ha",
+        "haw",
+        "he",
+        "hu",
+        "is",
+        "id",
+        "jw",
+        "kn",
+        "kk",
+        "km",
+        "lo",
+        "la",
+        "lv",
+        "ln",
+        "lt",
+        "lb",
+        "mk",
+        "mg",
+        "ms",
+        "ml",
+        "mt",
+        "mi",
+        "mr",
+        "mn",
+        "ne",
+        "no",
+        "nn",
+        "oc",
+        "pa",
+        "ps",
+        "fa",
+        "ro",
+        "sa",
+        "sr",
+        "sn",
+        "sd",
+        "si",
+        "sk",
+        "sl",
+        "so",
+        "su",
+        "sw",
+        "sv",
+        "de_ch",
+        "tl",
+        "tg",
+        "ta",
+        "tt",
+        "te",
+        "th",
+        "bo",
+        "tk",
+        "ur",
+        "uz",
+        "cy",
+        "yi",
+        "yo"
+      ],
+      "title": "TranscriptionLanguage",
+      "type": "string"
+    }
+  }
+}
