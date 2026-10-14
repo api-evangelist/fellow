@@ -1,5 +1,5 @@
 generated: '2026-10-14'
-method: none
+method: searched
 source:
 - https://zapier.com/apps/fellow/integrations
 - https://n8n.io/integrations/fellow/
@@ -7,10 +7,26 @@ source:
 - https://monid.ai/tools/fellow
 checked:
 - https://composio.dev/toolkits/fellow
+- https://marketplace.atlassian.com/
 - https://monid.ai/tools/fellow
 - https://n8n.io/integrations/fellow/
 - https://zapier.com/apps/fellow/integrations
 summary: null
 marketplace_apps: []
-edges: []
+edges:
+- partner_name: Atlassian Marketplace
+  partner: atlassian
+  partner_match: aggregator
+  type: marketplace
+  marketplace: atlassian
+  channel: partner-built
+  relationship: platform-app
+  direction: third-party
+  evidence: https://marketplace.atlassian.com/vendors/1218247/fellow-ai
+  listing_count: 1
+  apps:
+  - Fellow
+  publisher_name: Fellow.ai
+  detected_by: sweep-devtools.py
+  detected: '2026-10-14'
 templates: []
