@@ -1,0 +1,432 @@
+openapi: 3.2.0
+info:
+  title: Fellow Developer Action Items API
+  version: 1.0.3
+  description: Create custom integrations and workflows with Fellow's meeting data
+servers:
+- url: https://{subdomain}.fellow.app
+  description: Fellow
+  variables:
+    subdomain:
+      default: your-fellow-subdomain
+      description: The subdomain for your Fellow workspace
+tags:
+- name: Action Items
+  description: Access and manage action items from meetings. Retrieve, list, complete, or archive action items with optional filters and pagination.
+paths:
+  /api/v1/action_item/{action_item_id}:
+    get:
+      operationId: apps_developer_api_api_get_action_item_by_id
+      summary: Retrieve Action Item
+      parameters:
+      - in: path
+        name: action_item_id
+        schema:
+          title: Action Item Id
+          type: string
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActionItemResponse'
+      description: Retrieve an action item by its ID.
+      tags:
+      - Action Items
+      security:
+      - DeveloperAPIKeyAuth: []
+  /api/v1/action_item/{action_item_id}/archive:
+    post:
+      operationId: apps_developer_api_api_archive_action_item
+      summary: Archive Action Item
+      parameters:
+      - in: path
+        name: action_item_id
+        schema:
+          title: Action Item Id
+          type: string
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActionItemResponse'
+      description: Archive an action item by marking it as won't do.
+      tags:
+      - Action Items
+      security:
+      - DeveloperAPIKeyAuth: []
+  /api/v1/action_item/{action_item_id}/complete:
+    post:
+      operationId: apps_developer_api_api_mark_action_item_complete
+      summary: Mark Action Item Complete
+      parameters:
+      - in: path
+        name: action_item_id
+        schema:
+          title: Action Item Id
+          type: string
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActionItemResponse'
+      description: Mark an action item as complete or incomplete.
+      tags:
+      - Action Items
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MarkActionItemCompleteRequest'
+        required: true
+      security:
+      - DeveloperAPIKeyAuth: []
+  /api/v1/action_items:
+    post:
+      operationId: apps_developer_api_api_get_action_items
+      summary: List Action Items
+      parameters: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActionItemsListResponse'
+      description: 'List action items with optional filters and pagination.
+
+        Privileged access allows you to get action items for the account.
+
+        Non-privileged access allows you to get action items for the authenticated user only.
+
+
+        The `scope` filter controls which action items are returned:
+
+        - (no scope - default): All action items the user has access to
+
+        - assigned_to_me: Only action items assigned to the authenticated user
+
+        - assigned_to_others: Only action items the user can edit, assigned to teammates
+
+
+        The `created_at_start`, `created_at_end`, `updated_at_start` and `updated_at_end` filters take a
+
+        YYYY-MM-DD date or an ISO datetime and are inclusive. A value without a time means midnight UTC, so
+
+        pass a time on an end bound (`2024-01-05T23:59:59`) to cover the whole day. To page through a window
+
+        of changes, combine `updated_at_start` with `order_by: updated_at_asc`.
+
+
+        Whether `updated_at` moves depends on where the change was made. Edits in the note itself, including
+
+        its text, completion, assignees and due date, all bump `updated_at`. An assignee or due date changed
+
+        outside the note, such as from the action items list, is written to a separate record and leaves
+
+        `updated_at` unchanged, so the `updated_at` filters do not pick that item up.'
+      tags:
+      - Action Items
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetActionItemsRequest'
+        required: true
+      security:
+      - DeveloperAPIKeyAuth: []
+components:
+  schemas:
+    ActionItemFilters:
+      properties:
+        created_at_start:
+          description: Only return action items created at or after this date. Accepts YYYY-MM-DD or an ISO datetime, and is inclusive. A value without a time means midnight UTC, so an end bound of 2024-01-05 excludes everything later that day.
+          title: Created At Start
+          type:
+          - string
+          - 'null'
+        created_at_end:
+          description: Only return action items created at or before this date. Accepts YYYY-MM-DD or an ISO datetime, and is inclusive. A value without a time means midnight UTC, so an end bound of 2024-01-05 excludes everything later that day.
+          title: Created At End
+          type:
+          - string
+          - 'null'
+        updated_at_start:
+          description: Only return action items updated at or after this date. Accepts YYYY-MM-DD or an ISO datetime, and is inclusive. A value without a time means midnight UTC, so an end bound of 2024-01-05 excludes everything later that day. Whether updated_at moves depends on where the change was made. Edits in the note itself, including its text, completion, assignees and due date, all bump updated_at. An assignee or due date changed outside the note, such as from the action items list, is written to a separate record and leaves updated_at unchanged, so this filter does not pick that item up.
+          title: Updated At Start
+          type:
+          - string
+          - 'null'
+        updated_at_end:
+          description: Only return action items updated at or before this date. Accepts YYYY-MM-DD or an ISO datetime, and is inclusive. A value without a time means midnight UTC, so an end bound of 2024-01-05 excludes everything later that day. Whether updated_at moves depends on where the change was made. Edits in the note itself, including its text, completion, assignees and due date, all bump updated_at. An assignee or due date changed outside the note, such as from the action items list, is written to a separate record and leaves updated_at unchanged, so this filter does not pick that item up.
+          title: Updated At End
+          type:
+          - string
+          - 'null'
+        completed:
+          title: Completed
+          type:
+          - boolean
+          - 'null'
+        archived:
+          title: Archived
+          type:
+          - boolean
+          - 'null'
+        ai_detected:
+          title: Ai Detected
+          type:
+          - boolean
+          - 'null'
+        ai_suggestion_accepted_by_user:
+          title: Ai Suggestion Accepted By User
+          type:
+          - boolean
+          - 'null'
+        scope:
+          enum:
+          - assigned_to_me
+          - assigned_to_others
+          - all
+          title: Scope
+          type:
+          - string
+          - 'null'
+      title: ActionItemFilters
+      type: object
+    ActionItemStatus:
+      enum:
+      - Done
+      - Archived
+      - Incomplete
+      title: ActionItemStatus
+      type: string
+    PaginatedResponse_ActionItem_:
+      properties:
+        page_info:
+          $ref: '#/components/schemas/PageInfo'
+        data:
+          items:
+            $ref: '#/components/schemas/ActionItem'
+          title: Data
+          type: array
+      required:
+      - page_info
+      - data
+      title: PaginatedResponse[ActionItem]
+      type: object
+    PageInfo:
+      description: Information about a page returned in a paginated response.
+      properties:
+        cursor:
+          title: Cursor
+          type:
+          - string
+          - 'null'
+        page_size:
+          title: Page Size
+          type: integer
+      required:
+      - page_size
+      title: PageInfo
+      type: object
+    ActionItemsListResponse:
+      description: Response containing a paginated list of action items.
+      properties:
+        action_items:
+          $ref: '#/components/schemas/PaginatedResponse_ActionItem_'
+      required:
+      - action_items
+      title: ActionItemsListResponse
+      type: object
+    ActionItem:
+      description: API model for action items. Action items are stored as NoteBlock objects with type='todo'.
+      properties:
+        id:
+          title: Id
+          type: string
+        text:
+          title: Text
+          type: string
+        status:
+          allOf:
+          - $ref: '#/components/schemas/ActionItemStatus'
+        created_at:
+          format: date-time
+          title: Created At
+          type: string
+        updated_at:
+          format: date-time
+          title: Updated At
+          type: string
+        due_date:
+          title: Due Date
+          type:
+          - string
+          - 'null'
+        note_id:
+          title: Note Id
+          type:
+          - string
+          - 'null'
+        assignees:
+          items:
+            $ref: '#/components/schemas/ActionItemAssignee'
+          title: Assignees
+          type: array
+        completion_type:
+          enum:
+          - all
+          - any
+          title: Completion Type
+          type: string
+        ai_detected:
+          title: Ai Detected
+          type: boolean
+        recording_offset:
+          title: Recording Offset
+          type:
+          - number
+          - 'null'
+        ai_suggestion_accepted_by_user:
+          title: Ai Suggestion Accepted By User
+          type: boolean
+      title: ActionItem
+      type: object
+    PaginatedRequestParams:
+      description: Parameters sent in a request to paginate a queryset.
+      properties:
+        cursor:
+          title: Cursor
+          type:
+          - string
+          - 'null'
+        page_size:
+          default: 20
+          exclusiveMinimum: 0
+          maximum: 50
+          minimum: 1
+          title: Page Size
+          type: integer
+      title: PaginatedRequestParams
+      type: object
+    MarkActionItemCompleteRequest:
+      description: Request body for marking an action item as complete or incomplete.
+      properties:
+        completed:
+          title: Completed
+          type: boolean
+      required:
+      - completed
+      title: MarkActionItemCompleteRequest
+      type: object
+    GetActionItemsRequest:
+      description: Request body for getting action items with optional filters and pagination.
+      properties:
+        pagination:
+          allOf:
+          - $ref: '#/components/schemas/PaginatedRequestParams'
+            nullable: true
+        include:
+          allOf:
+          - $ref: '#/components/schemas/ActionItemIncludableExpensiveField'
+            nullable: true
+        order_by:
+          allOf:
+          - $ref: '#/components/schemas/ActionItemOrderBy'
+            nullable: true
+          description: 'Sort order for action items. Valid values: ''created_at_desc'' (default, newest first), ''created_at_asc'' (oldest first), ''updated_at_desc'' (most recently updated first), ''updated_at_asc'' (least recently updated first), ''due_date'' (soonest due date first, items without due dates appear last)'
+        filters:
+          allOf:
+          - $ref: '#/components/schemas/ActionItemFilters'
+            nullable: true
+      title: GetActionItemsRequest
+      type: object
+    ActionItemOrderBy:
+      description: Supported ordering options for action items.
+      enum:
+      - created_at_desc
+      - created_at_asc
+      - updated_at_desc
+      - updated_at_asc
+      - due_date
+      title: ActionItemOrderBy
+      type: string
+    ActionItemAssignee:
+      description: Represents an assignee of an action item.
+      properties:
+        id:
+          title: Id
+          type: string
+        full_name:
+          title: Full Name
+          type: string
+        email:
+          title: Email
+          type: string
+      required:
+      - id
+      - full_name
+      - email
+      title: ActionItemAssignee
+      type: object
+    ActionItemResponse:
+      description: Response containing a single action item.
+      properties:
+        action_item:
+          $ref: '#/components/schemas/ActionItem'
+      required:
+      - action_item
+      title: ActionItemResponse
+      type: object
+    ActionItemIncludableExpensiveField:
+      properties: {}
+      title: ActionItemIncludableExpensiveField
+      type: object
+  securitySchemes:
+    DeveloperAPIKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+x-provenance:
+  method: searched
+  source: https://developers.fellow.ai/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://developers.fellow.ai/reference/apps_developer_api_api_append_note_agenda.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_archive_action_item.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_create_webhook.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_delete_note.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_delete_recording.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_delete_webhook.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_find_replace_note_agenda.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_get_action_item_by_id.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_get_action_items.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_get_authenticated_user.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_get_note_by_id.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_get_notes.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_get_recording_by_id.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_get_recordings.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_get_upload_by_id.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_get_webhook_by_id.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_list_uploads.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_list_webhooks.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_mark_action_item_complete.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_prepend_note_agenda.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_update_webhook.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_upload_recording.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_write_note_agenda.md
+  merge:
+    pages: 23
+    deduped: 69
+    conflicts_kept_first: 0

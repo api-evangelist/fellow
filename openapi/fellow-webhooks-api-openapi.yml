@@ -1,0 +1,478 @@
+openapi: 3.2.0
+info:
+  title: Fellow Developer Webhooks API
+  version: 1.0.3
+  description: Create custom integrations and workflows with Fellow's meeting data
+servers:
+- url: https://{subdomain}.fellow.app
+  description: Fellow
+  variables:
+    subdomain:
+      default: your-fellow-subdomain
+      description: The subdomain for your Fellow workspace
+tags:
+- name: Webhooks
+  description: Create and manage webhook endpoints to receive real-time notifications when events occur in your Fellow workspace.
+paths:
+  /api/v1/webhook:
+    post:
+      operationId: apps_developer_api_api_create_webhook
+      summary: Create Webhook
+      parameters: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookCreateResponse'
+      description: 'Create a new webhook endpoint.
+
+
+        Creates a webhook that will receive HTTP POST requests when subscribed events occur.
+
+        The webhook will be associated with the authenticated user.
+
+
+        Set `scope` to `workspace` to create an account-wide webhook instead, which receives every
+
+        matching event in the account and is delivered once per event rather than once per attendee.
+
+        **Super Admin Access Required** for that value: a key acting through `X-On-Behalf-Of` cannot
+
+        create one, because impersonation drops privileged access.'
+      tags:
+      - Webhooks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateWebhookRequest'
+        required: true
+      security:
+      - DeveloperAPIKeyAuth: []
+  /api/v1/webhook/{webhook_id}:
+    get:
+      operationId: apps_developer_api_api_get_webhook_by_id
+      summary: Retrieve Webhook
+      parameters:
+      - in: path
+        name: webhook_id
+        schema:
+          title: Webhook Id
+          type: string
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookResponse'
+      description: Retrieve a webhook by its ID.
+      tags:
+      - Webhooks
+      security:
+      - DeveloperAPIKeyAuth: []
+    patch:
+      operationId: apps_developer_api_api_update_webhook
+      summary: Update Webhook
+      parameters:
+      - in: path
+        name: webhook_id
+        schema:
+          title: Webhook Id
+          type: string
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookResponse'
+      description: 'Update an existing webhook endpoint.
+
+
+        Allows partial updates - only provided fields will be modified.
+
+        The webhook must belong to the authenticated user (or account for privileged access).
+
+
+        An account-wide webhook is updated through this same endpoint, and needs a privileged key:
+
+        without one its id reads as not found, the same answer as another user''s webhook.
+
+
+        `scope` cannot be changed after creation, and is ignored here: a webhook''s scope decides
+
+        which Svix application its endpoint lives in, so converting one means deleting and
+
+        recreating it.'
+      tags:
+      - Webhooks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateWebhookRequest'
+        required: true
+      security:
+      - DeveloperAPIKeyAuth: []
+    delete:
+      operationId: apps_developer_api_api_delete_webhook
+      summary: Delete Webhook
+      parameters:
+      - in: path
+        name: webhook_id
+        schema:
+          title: Webhook Id
+          type: string
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookDeleteResponse'
+      description: 'Delete a webhook endpoint by its ID.
+
+
+        An account-wide webhook is deleted through this same endpoint, and needs a privileged key:
+
+        without one its id reads as not found.'
+      tags:
+      - Webhooks
+      security:
+      - DeveloperAPIKeyAuth: []
+  /api/v1/webhooks:
+    get:
+      operationId: apps_developer_api_api_list_webhooks
+      summary: List Webhooks
+      parameters:
+      - in: query
+        name: page_size
+        schema:
+          title: Page Size
+          type:
+          - integer
+          - 'null'
+        required: false
+      - in: query
+        name: cursor
+        schema:
+          title: Cursor
+          type:
+          - string
+          - 'null'
+        required: false
+      - in: query
+        name: filters
+        schema:
+          title: Filters
+          type:
+          - string
+          - 'null'
+        required: false
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhooksListResponse'
+      description: 'List webhooks with optional filters and pagination.
+
+
+        Query Parameters:
+
+        - page_size: Number of results per page (optional, default: 20, max: 50)
+
+        - cursor: Pagination cursor for next page (optional)
+
+        - filters: JSON-encoded WebhookFilters (optional)
+
+        Example: ?filters={"status":"active","created_at_start":"2024-01-01"}
+
+
+        Returns a list of webhooks for the authenticated user. Privileged access
+
+        allows listing all webhooks for the account.'
+      tags:
+      - Webhooks
+      security:
+      - DeveloperAPIKeyAuth: []
+components:
+  schemas:
+    WebhookCreateResponse:
+      description: Response for webhook creation, includes the secret (only returned once).
+      properties:
+        webhook:
+          $ref: '#/components/schemas/WebhookWithSecret'
+      required:
+      - webhook
+      title: WebhookCreateResponse
+      type: object
+    PaginatedResponse_Webhook_:
+      properties:
+        page_info:
+          $ref: '#/components/schemas/PageInfo'
+        data:
+          items:
+            $ref: '#/components/schemas/Webhook'
+          title: Data
+          type: array
+      required:
+      - page_info
+      - data
+      title: PaginatedResponse[Webhook]
+      type: object
+    PageInfo:
+      description: Information about a page returned in a paginated response.
+      properties:
+        cursor:
+          title: Cursor
+          type:
+          - string
+          - 'null'
+        page_size:
+          title: Page Size
+          type: integer
+      required:
+      - page_size
+      title: PageInfo
+      type: object
+    Webhook:
+      description: API model for webhook representation in the developer API.
+      properties:
+        id:
+          title: Id
+          type: string
+        url:
+          title: Url
+          type: string
+        description:
+          title: Description
+          type: string
+        status:
+          title: Status
+          type: string
+        scope:
+          title: Scope
+          type: string
+        enabled_events:
+          items:
+            type: string
+          title: Enabled Events
+          type: array
+        created_at:
+          format: date-time
+          title: Created At
+          type:
+          - string
+          - 'null'
+        updated_at:
+          format: date-time
+          title: Updated At
+          type:
+          - string
+          - 'null'
+      title: Webhook
+      type: object
+    WebhooksListResponse:
+      description: Response containing a paginated list of webhooks.
+      properties:
+        webhooks:
+          $ref: '#/components/schemas/PaginatedResponse_Webhook_'
+      required:
+      - webhooks
+      title: WebhooksListResponse
+      type: object
+    UpdateWebhookRequest:
+      description: Request body for updating a webhook. All fields are optional.
+      properties:
+        url:
+          description: The URL endpoint that will receive webhook POST requests
+          examples:
+          - https://example.com/webhooks/fellow
+          title: Url
+          type:
+          - string
+          - 'null'
+        enabled_events:
+          description: 'List of event types to subscribe to. Valid values: ''ai_note.shared_to_channel'', ''ai_note.generated'', ''action_item.assigned'', ''action_item.completed''.'
+          examples:
+          - - ai_note.shared_to_channel
+            - ai_note.generated
+          items:
+            type: string
+          title: Enabled Events
+          type:
+          - array
+          - 'null'
+        description:
+          description: Optional description for this webhook endpoint
+          title: Description
+          type:
+          - string
+          - 'null'
+        status:
+          description: 'Webhook status. Valid values: ''active'', ''inactive'''
+          enum:
+          - active
+          - inactive
+          title: Status
+          type:
+          - string
+          - 'null'
+      title: UpdateWebhookRequest
+      type: object
+    WebhookWithSecret:
+      description: Webhook response that includes the secret, only returned on creation.
+      properties:
+        id:
+          title: Id
+          type: string
+        url:
+          title: Url
+          type: string
+        description:
+          title: Description
+          type: string
+        status:
+          title: Status
+          type: string
+        scope:
+          title: Scope
+          type: string
+        enabled_events:
+          items:
+            type: string
+          title: Enabled Events
+          type: array
+        created_at:
+          format: date-time
+          title: Created At
+          type:
+          - string
+          - 'null'
+        updated_at:
+          format: date-time
+          title: Updated At
+          type:
+          - string
+          - 'null'
+        secret:
+          title: Secret
+          type: string
+      required:
+      - secret
+      title: WebhookWithSecret
+      type: object
+    WebhookDeleteResponse:
+      description: Response for webhook deletion.
+      properties:
+        webhook_id:
+          title: Webhook Id
+          type: string
+        deleted:
+          title: Deleted
+          type: boolean
+      required:
+      - webhook_id
+      - deleted
+      title: WebhookDeleteResponse
+      type: object
+    WebhookResponse:
+      description: Response containing a single webhook.
+      properties:
+        webhook:
+          $ref: '#/components/schemas/Webhook'
+      required:
+      - webhook
+      title: WebhookResponse
+      type: object
+    CreateWebhookRequest:
+      description: Request body for creating a webhook.
+      properties:
+        url:
+          description: The URL endpoint that will receive webhook POST requests
+          examples:
+          - https://example.com/webhooks/fellow
+          title: Url
+          type: string
+        enabled_events:
+          description: 'List of event types to subscribe to. Valid values: ''ai_note.shared_to_channel'', ''ai_note.generated'', ''action_item.assigned'', ''action_item.completed''.'
+          examples:
+          - - ai_note.shared_to_channel
+            - ai_note.generated
+          items:
+            type: string
+          title: Enabled Events
+          type: array
+        description:
+          default: ''
+          description: Optional description for this webhook endpoint
+          title: Description
+          type: string
+        status:
+          default: active
+          description: 'Webhook status. Valid values: ''active'', ''inactive'''
+          enum:
+          - active
+          - inactive
+          title: Status
+          type: string
+        scope:
+          default: user
+          description: 'Who the webhook belongs to. ''user'' is the authenticated user, the default and the existing behaviour. ''workspace'' is the whole account: it receives every matching event with no per-user filter, and each event is delivered once rather than once per attendee. Creating one requires a privileged API key.'
+          enum:
+          - user
+          - workspace
+          title: Scope
+          type: string
+      required:
+      - url
+      - enabled_events
+      title: CreateWebhookRequest
+      type: object
+  securitySchemes:
+    DeveloperAPIKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+x-provenance:
+  method: searched
+  source: https://developers.fellow.ai/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://developers.fellow.ai/reference/apps_developer_api_api_append_note_agenda.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_archive_action_item.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_create_webhook.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_delete_note.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_delete_recording.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_delete_webhook.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_find_replace_note_agenda.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_get_action_item_by_id.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_get_action_items.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_get_authenticated_user.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_get_note_by_id.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_get_notes.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_get_recording_by_id.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_get_recordings.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_get_upload_by_id.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_get_webhook_by_id.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_list_uploads.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_list_webhooks.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_mark_action_item_complete.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_prepend_note_agenda.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_update_webhook.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_upload_recording.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_write_note_agenda.md
+  merge:
+    pages: 23
+    deduped: 69
+    conflicts_kept_first: 0

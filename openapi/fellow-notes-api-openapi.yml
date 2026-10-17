@@ -1,0 +1,591 @@
+openapi: 3.2.0
+info:
+  title: Fellow Developer Notes API
+  version: 1.0.3
+  description: Create custom integrations and workflows with Fellow's meeting data
+servers:
+- url: https://{subdomain}.fellow.app
+  description: Fellow
+  variables:
+    subdomain:
+      default: your-fellow-subdomain
+      description: The subdomain for your Fellow workspace
+tags:
+- name: Notes
+  description: Access and manage meeting notes and their agendas. Retrieve individual notes, list notes with filters and pagination, delete notes (privileged access required), or edit agenda content as Fellow Markdown by replacing the whole agenda, appending or prepending to it, or finding and replacing a single occurrence of text.
+paths:
+  /api/v1/note/{note_id}:
+    get:
+      operationId: apps_developer_api_api_get_note_by_id
+      summary: Retrieve Note
+      parameters:
+      - in: path
+        name: note_id
+        schema:
+          title: Note Id
+          type: string
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NoteResponse'
+      description: Retrieve a note by its ID.
+      tags:
+      - Notes
+      security:
+      - DeveloperAPIKeyAuth: []
+    delete:
+      operationId: apps_developer_api_api_delete_note
+      summary: Delete Note
+      parameters:
+      - in: path
+        name: note_id
+        schema:
+          title: Note Id
+          type: string
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+      description: 'Delete a note by its ID.
+
+
+        **Super Admin Access Required**: This endpoint is restricted to API keys with privileged access.
+
+        Only users with super admin privileges can delete notes through the API.'
+      tags:
+      - Notes
+      security:
+      - DeveloperAPIKeyAuth: []
+  /api/v1/note/{note_id}/agenda:
+    post:
+      operationId: apps_developer_api_api_write_note_agenda
+      summary: Replace Note Agenda
+      parameters:
+      - in: path
+        name: note_id
+        schema:
+          title: Note Id
+          type: string
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NoteAgendaResponse'
+      description: 'Write a note''s agenda and/or rename the note. Provide `content_fellow_markdown`, `title`, or both.
+
+
+        `content_fellow_markdown` replaces the entire agenda with the provided Fellow Markdown.
+
+
+        `title` renames the note, the same as renaming it in the Fellow app.'
+      tags:
+      - Notes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WriteNoteAgendaRequest'
+        required: true
+      security:
+      - DeveloperAPIKeyAuth: []
+  /api/v1/note/{note_id}/agenda/append:
+    post:
+      operationId: apps_developer_api_api_append_note_agenda
+      summary: Append To Note Agenda
+      parameters:
+      - in: path
+        name: note_id
+        schema:
+          title: Note Id
+          type: string
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NoteAgendaResponse'
+      description: Add Fellow Markdown to the end of a note's agenda, leaving the rest of the content in place.
+      tags:
+      - Notes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AppendNoteAgendaRequest'
+        required: true
+      security:
+      - DeveloperAPIKeyAuth: []
+  /api/v1/note/{note_id}/agenda/find-replace:
+    post:
+      operationId: apps_developer_api_api_find_replace_note_agenda
+      summary: Find And Replace In Note Agenda
+      parameters:
+      - in: path
+        name: note_id
+        schema:
+          title: Note Id
+          type: string
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NoteAgendaResponse'
+      description: 'Replace the single occurrence of `find` in a note''s agenda with Fellow Markdown.
+
+
+        `find` must match exactly once. A missing or ambiguous match is a 422 and changes nothing.'
+      tags:
+      - Notes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FindReplaceNoteAgendaRequest'
+        required: true
+      security:
+      - DeveloperAPIKeyAuth: []
+  /api/v1/note/{note_id}/agenda/prepend:
+    post:
+      operationId: apps_developer_api_api_prepend_note_agenda
+      summary: Prepend To Note Agenda
+      parameters:
+      - in: path
+        name: note_id
+        schema:
+          title: Note Id
+          type: string
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NoteAgendaResponse'
+      description: Add Fellow Markdown to the start of a note's agenda, leaving the rest of the content in place.
+      tags:
+      - Notes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PrependNoteAgendaRequest'
+        required: true
+      security:
+      - DeveloperAPIKeyAuth: []
+  /api/v1/notes:
+    post:
+      operationId: apps_developer_api_api_get_notes
+      summary: List Notes
+      parameters: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotesListResponse'
+      description: 'List notes with optional filters and pagination.
+
+        Privileged access allows you to get notes for the account.
+
+        Non-privileged access allows you to get notes for the authenticated user only.'
+      tags:
+      - Notes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetNotesRequest'
+        required: true
+      security:
+      - DeveloperAPIKeyAuth: []
+components:
+  schemas:
+    NotesListResponse:
+      description: Response containing a paginated list of notes.
+      properties:
+        notes:
+          $ref: '#/components/schemas/PaginatedResponse_Note_'
+      required:
+      - notes
+      title: NotesListResponse
+      type: object
+    Note:
+      properties:
+        id:
+          title: Id
+          type: string
+        created_at:
+          format: date-time
+          title: Created At
+          type:
+          - string
+          - 'null'
+        updated_at:
+          format: date-time
+          title: Updated At
+          type:
+          - string
+          - 'null'
+        title:
+          title: Title
+          type:
+          - string
+          - 'null'
+        event_guid:
+          title: Event Guid
+          type:
+          - string
+          - 'null'
+        event_start:
+          format: date-time
+          title: Event Start
+          type:
+          - string
+          - 'null'
+        event_end:
+          format: date-time
+          title: Event End
+          type:
+          - string
+          - 'null'
+        event_is_all_day:
+          title: Event Is All Day
+          type: boolean
+        recording_ids:
+          items:
+            type: string
+          title: Recording Ids
+          type: array
+        event_attendees:
+          items:
+            $ref: '#/components/schemas/Attendee'
+          title: Event Attendees
+          type:
+          - array
+          - 'null'
+        organizer_email:
+          description: Email of the meeting organizer, as read from the calendar event linked to this note. Null when the note has no meeting, when the matching calendar event cannot be found, or when the event has no known organizer. The organizer is read from one attendee's copy of the event, chosen automatically, so it may change between requests and may differ from the organizer shown elsewhere for the same meeting.
+          title: Organizer Email
+          type:
+          - string
+          - 'null'
+        content_markdown:
+          description: A simplified, read-only markdown rendering of the note content, for display and export. Lossy, and not valid input for the agenda write endpoint; to edit content, use content_fellow_markdown instead.
+          title: Content Markdown
+          type:
+          - string
+          - 'null'
+        content_fellow_markdown:
+          description: 'The note content as Fellow Markdown, the editable round-trip format: what you read here is what you can write back via POST /note/{note_id}/agenda. Null when the note exceeds the serialization limits.'
+          title: Content Fellow Markdown
+          type:
+          - string
+          - 'null'
+      title: Note
+      type: object
+    MessageResponse:
+      description: Simple message response for operations like delete.
+      properties:
+        message:
+          title: Message
+          type: string
+      required:
+      - message
+      title: MessageResponse
+      type: object
+    NoteAgendaResponse:
+      description: Response containing a note's agenda as Fellow Markdown.
+      properties:
+        agenda:
+          $ref: '#/components/schemas/NoteAgenda'
+      required:
+      - agenda
+      title: NoteAgendaResponse
+      type: object
+    PageInfo:
+      description: Information about a page returned in a paginated response.
+      properties:
+        cursor:
+          title: Cursor
+          type:
+          - string
+          - 'null'
+        page_size:
+          title: Page Size
+          type: integer
+      required:
+      - page_size
+      title: PageInfo
+      type: object
+    PaginatedResponse_Note_:
+      properties:
+        page_info:
+          $ref: '#/components/schemas/PageInfo'
+        data:
+          items:
+            $ref: '#/components/schemas/Note'
+          title: Data
+          type: array
+      required:
+      - page_info
+      - data
+      title: PaginatedResponse[Note]
+      type: object
+    FindReplaceNoteAgendaRequest:
+      description: Request body for replacing a single occurrence of text in a note's agenda.
+      properties:
+        find:
+          description: Existing agenda text to replace. Must appear exactly once, or the request is rejected.
+          minLength: 1
+          title: Find
+          type: string
+        content_fellow_markdown:
+          description: Fellow Markdown to substitute for the matched text, in the same format the note object's content_fellow_markdown field returns. An empty string deletes the matched text.
+          title: Content Fellow Markdown
+          type: string
+      required:
+      - find
+      - content_fellow_markdown
+      title: FindReplaceNoteAgendaRequest
+      type: object
+    PaginatedRequestParams:
+      description: Parameters sent in a request to paginate a queryset.
+      properties:
+        cursor:
+          title: Cursor
+          type:
+          - string
+          - 'null'
+        page_size:
+          default: 20
+          exclusiveMinimum: 0
+          maximum: 50
+          minimum: 1
+          title: Page Size
+          type: integer
+      title: PaginatedRequestParams
+      type: object
+    PrependNoteAgendaRequest:
+      description: Request body for prepending Fellow Markdown to the start of a note's agenda.
+      properties:
+        content_fellow_markdown:
+          description: Fellow Markdown to add at the start of the agenda, in the same format the note object's content_fellow_markdown field returns.
+          title: Content Fellow Markdown
+          type: string
+      required:
+      - content_fellow_markdown
+      title: PrependNoteAgendaRequest
+      type: object
+    NoteIncludableExpensiveField:
+      properties:
+        event_attendees:
+          default: false
+          title: Event Attendees
+          type: boolean
+        organizer_email:
+          default: false
+          title: Organizer Email
+          type: boolean
+        content_markdown:
+          default: false
+          title: Content Markdown
+          type: boolean
+        content_fellow_markdown:
+          default: false
+          title: Content Fellow Markdown
+          type: boolean
+      title: NoteIncludableExpensiveField
+      type: object
+    NoteAgenda:
+      description: 'A note''s agenda content in Fellow Markdown.
+
+
+        Fellow Markdown is the editable format: what you read can be modified and written
+
+        back as-is. It is not the same format as the note object''s read-only
+
+        `content_markdown` field.'
+      properties:
+        note_id:
+          title: Note Id
+          type: string
+        title:
+          title: Title
+          type:
+          - string
+          - 'null'
+        content_fellow_markdown:
+          title: Content Fellow Markdown
+          type: string
+      required:
+      - note_id
+      - title
+      - content_fellow_markdown
+      title: NoteAgenda
+      type: object
+    WriteNoteAgendaRequest:
+      description: Request body for writing a note's agenda and/or renaming the note.
+      properties:
+        content_fellow_markdown:
+          description: The full agenda body in Fellow Markdown, the same format the note object's content_fellow_markdown field returns. When provided, replaces the existing agenda content.
+          title: Content Fellow Markdown
+          type:
+          - string
+          - 'null'
+        title:
+          description: New title for the note. When provided, renames the note.
+          title: Title
+          type:
+          - string
+          - 'null'
+      title: WriteNoteAgendaRequest
+      type: object
+    Attendee:
+      properties:
+        email:
+          title: Email
+          type:
+          - string
+          - 'null'
+      title: Attendee
+      type: object
+    GetNotesRequest:
+      description: Request body for getting notes with optional filters and pagination.
+      properties:
+        pagination:
+          allOf:
+          - $ref: '#/components/schemas/PaginatedRequestParams'
+            nullable: true
+        include:
+          allOf:
+          - $ref: '#/components/schemas/NoteIncludableExpensiveField'
+            nullable: true
+        filters:
+          allOf:
+          - $ref: '#/components/schemas/NoteFilters'
+            nullable: true
+      title: GetNotesRequest
+      type: object
+    NoteResponse:
+      description: Response containing a single note.
+      properties:
+        note:
+          $ref: '#/components/schemas/Note'
+      required:
+      - note
+      title: NoteResponse
+      type: object
+    NoteFilters:
+      properties:
+        event_guid:
+          title: Event Guid
+          type:
+          - string
+          - 'null'
+        created_at_start:
+          title: Created At Start
+          type:
+          - string
+          - 'null'
+        created_at_end:
+          title: Created At End
+          type:
+          - string
+          - 'null'
+        updated_at_start:
+          title: Updated At Start
+          type:
+          - string
+          - 'null'
+        updated_at_end:
+          title: Updated At End
+          type:
+          - string
+          - 'null'
+        channel_id:
+          title: Channel Id
+          type:
+          - string
+          - 'null'
+        title:
+          title: Title
+          type:
+          - string
+          - 'null'
+        event_attendees:
+          items:
+            type: string
+          title: Event Attendees
+          type:
+          - array
+          - 'null'
+      title: NoteFilters
+      type: object
+    AppendNoteAgendaRequest:
+      description: Request body for appending Fellow Markdown to the end of a note's agenda.
+      properties:
+        content_fellow_markdown:
+          description: Fellow Markdown to add at the end of the agenda, in the same format the note object's content_fellow_markdown field returns.
+          title: Content Fellow Markdown
+          type: string
+      required:
+      - content_fellow_markdown
+      title: AppendNoteAgendaRequest
+      type: object
+  securitySchemes:
+    DeveloperAPIKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+x-provenance:
+  method: searched
+  source: https://developers.fellow.ai/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://developers.fellow.ai/reference/apps_developer_api_api_append_note_agenda.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_archive_action_item.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_create_webhook.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_delete_note.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_delete_recording.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_delete_webhook.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_find_replace_note_agenda.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_get_action_item_by_id.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_get_action_items.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_get_authenticated_user.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_get_note_by_id.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_get_notes.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_get_recording_by_id.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_get_recordings.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_get_upload_by_id.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_get_webhook_by_id.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_list_uploads.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_list_webhooks.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_mark_action_item_complete.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_prepend_note_agenda.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_update_webhook.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_upload_recording.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_write_note_agenda.md
+  merge:
+    pages: 23
+    deduped: 69
+    conflicts_kept_first: 0

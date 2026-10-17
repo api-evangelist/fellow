@@ -182,27 +182,18 @@ common:
   url: well-known/fellow-well-known.yml
 
 apis:
-- name: Fellow Developer API
-  description: REST API for accessing Fellow meeting data — recordings, transcripts, structured notes, and action items — plus recording uploads
-    and webhook management. Uses X-API-KEY authentication, cursor-based pagination, and svix-signed webhooks for real-time events (ai_note.generated,
-    ai_note.shared_to_channel, action_item.assigned, action_item.completed).
+- aid: fellow:fellow-action-items-api
+  name: Fellow Action Items API
+  description: >-
+    Access and manage action items from meetings. Retrieve, list, complete, or archive action items with
+    optional filters and pagination.
   humanURL: https://developers.fellow.ai/
   baseURL: https://{subdomain}.fellow.app/api/v1
   tags:
-  - Meetings
-  - Transcription
-  - Notes
   - Action Items
-  - Webhook
-  tags_raw:
-  - Meetings
-  - Transcription
-  - Notes
-  - Action Items
-  - Webhooks
   properties:
-  - url: openapi/fellow-developer-api-openapi.yml
-    type: OpenAPI
+  - type: OpenAPI
+    url: openapi/fellow-action-items-api-openapi.yml
   - type: Documentation
     url: https://developers.fellow.ai/
   - type: APIReference
@@ -237,8 +228,190 @@ apis:
     url: json-schema/fellow-find-replace-note-agenda-request-schema.json
   - type: JSONSchema
     url: json-schema/fellow-write-note-agenda-request-schema.json
-  aid: fellow:fellow-developer-api
-
+- aid: fellow:fellow-notes-api
+  name: Fellow Notes API
+  description: >-
+    Access and manage meeting notes and their agendas. Retrieve individual notes, list notes with filters
+    and pagination, delete notes (privileged access required), or edit agenda content as Fellow Markdown
+    by replacing the whole agenda, appending or prepending to it, or finding and replacing a single occurrence
+    of text.
+  humanURL: https://developers.fellow.ai/
+  baseURL: https://{subdomain}.fellow.app/api/v1
+  tags:
+  - Notes
+  properties:
+  - type: OpenAPI
+    url: openapi/fellow-notes-api-openapi.yml
+  - type: Documentation
+    url: https://developers.fellow.ai/
+  - type: APIReference
+    url: https://developers.fellow.ai/reference/introduction
+  - type: GettingStarted
+    url: https://developers.fellow.ai/reference/authentication-1
+  - type: Authentication
+    url: authentication/fellow-authentication.yml
+  - type: OAuthScopes
+    url: scopes/fellow-scopes.yml
+  - type: Webhooks
+    url: asyncapi/fellow-webhooks-asyncapi.yml
+  - type: AsyncAPI
+    url: asyncapi/fellow-webhooks-asyncapi.yml
+  - type: RateLimits
+    url: rate-limits/fellow-rate-limits.yml
+  - type: ErrorCatalog
+    url: errors/fellow-problem-types.yml
+  - type: Conventions
+    url: conventions/fellow-conventions.yml
+  - type: DataModel
+    url: data-model/fellow-data-model.yml
+  - type: JSONSchema
+    url: json-schema/fellow-create-webhook-request-schema.json
+  - type: JSONSchema
+    url: json-schema/fellow-update-webhook-request-schema.json
+  - type: JSONSchema
+    url: json-schema/fellow-get-action-items-request-schema.json
+  - type: JSONSchema
+    url: json-schema/fellow-recording-upload-request-schema.json
+  - type: JSONSchema
+    url: json-schema/fellow-find-replace-note-agenda-request-schema.json
+  - type: JSONSchema
+    url: json-schema/fellow-write-note-agenda-request-schema.json
+- aid: fellow:fellow-recordings-api
+  name: Fellow Recordings API
+  description: >-
+    Access and manage meeting recordings. Retrieve individual recordings, list recordings with filters
+    and pagination, or delete recordings (privileged access required).
+  humanURL: https://developers.fellow.ai/
+  baseURL: https://{subdomain}.fellow.app/api/v1
+  tags:
+  - Recordings
+  properties:
+  - type: OpenAPI
+    url: openapi/fellow-recordings-api-openapi.yml
+  - type: Documentation
+    url: https://developers.fellow.ai/
+  - type: APIReference
+    url: https://developers.fellow.ai/reference/introduction
+  - type: GettingStarted
+    url: https://developers.fellow.ai/reference/authentication-1
+  - type: Authentication
+    url: authentication/fellow-authentication.yml
+  - type: OAuthScopes
+    url: scopes/fellow-scopes.yml
+  - type: Webhooks
+    url: asyncapi/fellow-webhooks-asyncapi.yml
+  - type: AsyncAPI
+    url: asyncapi/fellow-webhooks-asyncapi.yml
+  - type: RateLimits
+    url: rate-limits/fellow-rate-limits.yml
+  - type: ErrorCatalog
+    url: errors/fellow-problem-types.yml
+  - type: Conventions
+    url: conventions/fellow-conventions.yml
+  - type: DataModel
+    url: data-model/fellow-data-model.yml
+  - type: JSONSchema
+    url: json-schema/fellow-create-webhook-request-schema.json
+  - type: JSONSchema
+    url: json-schema/fellow-update-webhook-request-schema.json
+  - type: JSONSchema
+    url: json-schema/fellow-get-action-items-request-schema.json
+  - type: JSONSchema
+    url: json-schema/fellow-recording-upload-request-schema.json
+  - type: JSONSchema
+    url: json-schema/fellow-find-replace-note-agenda-request-schema.json
+  - type: JSONSchema
+    url: json-schema/fellow-write-note-agenda-request-schema.json
+- aid: fellow:fellow-users-api
+  name: Fellow Users API
+  description: Retrieve information about the currently authenticated user and their workspace.
+  humanURL: https://developers.fellow.ai/
+  baseURL: https://{subdomain}.fellow.app/api/v1
+  tags:
+  - Users
+  properties:
+  - type: OpenAPI
+    url: openapi/fellow-users-api-openapi.yml
+  - type: Documentation
+    url: https://developers.fellow.ai/
+  - type: APIReference
+    url: https://developers.fellow.ai/reference/introduction
+  - type: GettingStarted
+    url: https://developers.fellow.ai/reference/authentication-1
+  - type: Authentication
+    url: authentication/fellow-authentication.yml
+  - type: OAuthScopes
+    url: scopes/fellow-scopes.yml
+  - type: Webhooks
+    url: asyncapi/fellow-webhooks-asyncapi.yml
+  - type: AsyncAPI
+    url: asyncapi/fellow-webhooks-asyncapi.yml
+  - type: RateLimits
+    url: rate-limits/fellow-rate-limits.yml
+  - type: ErrorCatalog
+    url: errors/fellow-problem-types.yml
+  - type: Conventions
+    url: conventions/fellow-conventions.yml
+  - type: DataModel
+    url: data-model/fellow-data-model.yml
+  - type: JSONSchema
+    url: json-schema/fellow-create-webhook-request-schema.json
+  - type: JSONSchema
+    url: json-schema/fellow-update-webhook-request-schema.json
+  - type: JSONSchema
+    url: json-schema/fellow-get-action-items-request-schema.json
+  - type: JSONSchema
+    url: json-schema/fellow-recording-upload-request-schema.json
+  - type: JSONSchema
+    url: json-schema/fellow-find-replace-note-agenda-request-schema.json
+  - type: JSONSchema
+    url: json-schema/fellow-write-note-agenda-request-schema.json
+- aid: fellow:fellow-webhooks-api
+  name: Fellow Webhooks API
+  description: >-
+    Create and manage webhook endpoints to receive real-time notifications when events occur in your Fellow
+    workspace.
+  humanURL: https://developers.fellow.ai/
+  baseURL: https://{subdomain}.fellow.app/api/v1
+  tags:
+  - Webhooks
+  properties:
+  - type: OpenAPI
+    url: openapi/fellow-webhooks-api-openapi.yml
+  - type: Documentation
+    url: https://developers.fellow.ai/
+  - type: APIReference
+    url: https://developers.fellow.ai/reference/introduction
+  - type: GettingStarted
+    url: https://developers.fellow.ai/reference/authentication-1
+  - type: Authentication
+    url: authentication/fellow-authentication.yml
+  - type: OAuthScopes
+    url: scopes/fellow-scopes.yml
+  - type: Webhooks
+    url: asyncapi/fellow-webhooks-asyncapi.yml
+  - type: AsyncAPI
+    url: asyncapi/fellow-webhooks-asyncapi.yml
+  - type: RateLimits
+    url: rate-limits/fellow-rate-limits.yml
+  - type: ErrorCatalog
+    url: errors/fellow-problem-types.yml
+  - type: Conventions
+    url: conventions/fellow-conventions.yml
+  - type: DataModel
+    url: data-model/fellow-data-model.yml
+  - type: JSONSchema
+    url: json-schema/fellow-create-webhook-request-schema.json
+  - type: JSONSchema
+    url: json-schema/fellow-update-webhook-request-schema.json
+  - type: JSONSchema
+    url: json-schema/fellow-get-action-items-request-schema.json
+  - type: JSONSchema
+    url: json-schema/fellow-recording-upload-request-schema.json
+  - type: JSONSchema
+    url: json-schema/fellow-find-replace-note-agenda-request-schema.json
+  - type: JSONSchema
+    url: json-schema/fellow-write-note-agenda-request-schema.json
 x-enrichment:
   date: '2026-07-19'
   status: backfilled

@@ -1,0 +1,27 @@
+{
+  "provider": "fellow",
+  "sources": [
+    "fellow-developer-api-openapi.yml"
+  ],
+  "outputs": [
+    "fellow-action-items-api-openapi.yml",
+    "fellow-notes-api-openapi.yml",
+    "fellow-recordings-api-openapi.yml",
+    "fellow-users-api-openapi.yml",
+    "fellow-webhooks-api-openapi.yml"
+  ],
+  "archived": [
+    "deleted 1 superseded output(s) from the previous generation"
+  ],
+  "errors": [],
+  "warnings": [
+    "fellow-developer-api-openapi.yml: previously refined output kept for 23 operation(s) no archived document covers (e.g. /api/v1/action_item/{action_item_id} get, /api/v1/action_item/{action_item_id}/archive post, /api/v1/action_item/{action_item_id}/complete post); its other 0 operation(s) came from the archive and were dropped from it. The archive is incomplete for this provider \u2014 re-harvest to restore _original/ as the full source of truth."
+  ],
+  "notes": [
+    "sourced from openapi/_original/ (0 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "fellow-developer-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "superseded outputs removed: fellow-developer-api-openapi.yml",
+    "apis.yml register: written (+5 apis, 5 total)"
+  ],
+  "skipped": []
+}

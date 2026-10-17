@@ -1,0 +1,989 @@
+openapi: 3.2.0
+info:
+  title: Fellow Developer Recordings API
+  version: 1.0.3
+  description: Create custom integrations and workflows with Fellow's meeting data
+servers:
+- url: https://{subdomain}.fellow.app
+  description: Fellow
+  variables:
+    subdomain:
+      default: your-fellow-subdomain
+      description: The subdomain for your Fellow workspace
+tags:
+- name: Recordings
+  description: Access and manage meeting recordings. Retrieve individual recordings, list recordings with filters and pagination, or delete recordings (privileged access required).
+paths:
+  /api/v1/recording/{recording_id}:
+    get:
+      operationId: apps_developer_api_api_get_recording_by_id
+      summary: Retrieve Recording
+      parameters:
+      - in: path
+        name: recording_id
+        schema:
+          title: Recording Id
+          type: string
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecordingResponse'
+      description: Retrieve a recording by its ID.
+      tags:
+      - Recordings
+      security:
+      - DeveloperAPIKeyAuth: []
+    delete:
+      operationId: apps_developer_api_api_delete_recording
+      summary: Delete Recording
+      parameters:
+      - in: path
+        name: recording_id
+        schema:
+          title: Recording Id
+          type: string
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+      description: 'Delete a recording by its ID.
+
+
+        **Super Admin Access Required**: This endpoint is restricted to API keys with privileged access.
+
+        Only users with super admin privileges can delete recordings through the API.'
+      tags:
+      - Recordings
+      security:
+      - DeveloperAPIKeyAuth: []
+  /api/v1/recordings:
+    post:
+      operationId: apps_developer_api_api_get_recordings
+      summary: List Recordings
+      parameters: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecordingsListResponse'
+      description: List recordings with optional filters and pagination.
+      tags:
+      - Recordings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetRecordingsRequest'
+        required: true
+      security:
+      - DeveloperAPIKeyAuth: []
+  /api/v1/recordings/upload:
+    post:
+      operationId: apps_developer_api_api_upload_recording
+      summary: Upload Recording
+      parameters: []
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecordingUploadSubmitResponse'
+      description: Upload a recording from a URL.
+      tags:
+      - Recordings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecordingUploadRequest'
+        required: true
+      security:
+      - DeveloperAPIKeyAuth: []
+  /api/v1/recordings/upload/list:
+    post:
+      operationId: apps_developer_api_api_list_uploads
+      summary: List Uploads
+      parameters: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecordingUploadsListResponse'
+      description: List API-uploaded recordings with their import status, with optional filters and pagination.
+      tags:
+      - Recordings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetUploadsRequest'
+        required: true
+      security:
+      - DeveloperAPIKeyAuth: []
+  /api/v1/recordings/upload/{recording_id}:
+    get:
+      operationId: apps_developer_api_api_get_upload_by_id
+      summary: Retrieve Upload
+      parameters:
+      - in: path
+        name: recording_id
+        schema:
+          title: Recording Id
+          type: string
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecordingUploadResponse'
+      description: Retrieve a single API-uploaded recording with its import status.
+      tags:
+      - Recordings
+      security:
+      - DeveloperAPIKeyAuth: []
+components:
+  schemas:
+    RecapBulletPoint:
+      properties:
+        timestamp:
+          title: Timestamp
+          type: integer
+        text:
+          title: Text
+          type: string
+      required:
+      - timestamp
+      - text
+      title: RecapBulletPoint
+      type: object
+    Status:
+      enum:
+      - FAILED
+      - PENDING
+      - SUCCESS
+      title: Status
+      type: string
+    MessageResponse:
+      description: Simple message response for operations like delete.
+      properties:
+        message:
+          title: Message
+          type: string
+      required:
+      - message
+      title: MessageResponse
+      type: object
+    RecordingsListResponse:
+      description: Response containing a paginated list of recordings.
+      properties:
+        recordings:
+          $ref: '#/components/schemas/PaginatedResponse_Recording_'
+      required:
+      - recordings
+      title: RecordingsListResponse
+      type: object
+    BearerTokenAuth:
+      properties:
+        type:
+          const: bearer_token
+          default: bearer_token
+          title: Type
+          type: string
+        token:
+          minLength: 1
+          title: Token
+          type: string
+      required:
+      - token
+      title: BearerTokenAuth
+      type: object
+    RecordingUpload:
+      description: 'The upload_api response: a recording''s API-import identity and status, nothing else.
+
+
+        Deliberately omits the full Recording payload (transcript, recaps, media URL, calendar
+
+        metadata) — this surface only reports what an API-upload client needs to poll an import
+
+        to completion. The recording''s id is exposed as `recording_id` to match the submit
+
+        endpoint (POST /recordings/upload), which returns the same key.'
+      properties:
+        recording_id:
+          title: Recording Id
+          type: string
+        title:
+          title: Title
+          type:
+          - string
+          - 'null'
+        created_at:
+          format: date-time
+          title: Created At
+          type:
+          - string
+          - 'null'
+        updated_at:
+          format: date-time
+          title: Updated At
+          type:
+          - string
+          - 'null'
+        status:
+          allOf:
+          - $ref: '#/components/schemas/Status'
+            nullable: true
+        failure_reason:
+          title: Failure Reason
+          type:
+          - string
+          - 'null'
+      title: RecordingUpload
+      type: object
+    RecordingUploadResponse:
+      description: Response containing a single API-uploaded recording with its import status.
+      properties:
+        upload:
+          $ref: '#/components/schemas/RecordingUpload'
+      required:
+      - upload
+      title: RecordingUploadResponse
+      type: object
+    Transcript:
+      properties:
+        speech_segments:
+          items:
+            $ref: '#/components/schemas/TranscriptSegment'
+          title: Speech Segments
+          type: array
+        language_code:
+          title: Language Code
+          type:
+          - string
+          - 'null'
+      required:
+      - speech_segments
+      title: Transcript
+      type: object
+    PaginatedResponse_Recording_:
+      properties:
+        page_info:
+          $ref: '#/components/schemas/PageInfo'
+        data:
+          items:
+            $ref: '#/components/schemas/Recording'
+          title: Data
+          type: array
+      required:
+      - page_info
+      - data
+      title: PaginatedResponse[Recording]
+      type: object
+    BasicAuth:
+      properties:
+        type:
+          const: basic_auth
+          default: basic_auth
+          title: Type
+          type: string
+        username:
+          minLength: 1
+          title: Username
+          type: string
+        password:
+          title: Password
+          type: string
+      required:
+      - username
+      - password
+      title: BasicAuth
+      type: object
+    GetRecordingsRequest:
+      description: Request body for getting recordings with optional filters and pagination.
+      properties:
+        pagination:
+          allOf:
+          - $ref: '#/components/schemas/PaginatedRequestParams'
+            nullable: true
+        include:
+          allOf:
+          - $ref: '#/components/schemas/RecordingIncludableExpensiveField'
+            nullable: true
+        filters:
+          allOf:
+          - $ref: '#/components/schemas/RecordingFilters'
+            nullable: true
+        media_url:
+          allOf:
+          - $ref: '#/components/schemas/MediaUrlConfig'
+            nullable: true
+      title: GetRecordingsRequest
+      type: object
+    RecordingIncludableExpensiveField:
+      properties:
+        transcript:
+          default: false
+          title: Transcript
+          type: boolean
+        ai_notes:
+          default: false
+          title: Ai Notes
+          type: boolean
+      title: RecordingIncludableExpensiveField
+      type: object
+    RecapKeyMoment:
+      properties:
+        timestamp:
+          title: Timestamp
+          type: integer
+        text:
+          title: Text
+          type: string
+      required:
+      - timestamp
+      - text
+      title: RecapKeyMoment
+      type: object
+    RecapActionItem:
+      properties:
+        timestamp:
+          title: Timestamp
+          type: integer
+        text:
+          title: Text
+          type: string
+        id:
+          title: Id
+          type:
+          - string
+          - 'null'
+        assignees:
+          items:
+            $ref: '#/components/schemas/ActionItemAssignee'
+          title: Assignees
+          type: array
+        completion_type:
+          enum:
+          - all
+          - any
+          title: Completion Type
+          type:
+          - string
+          - 'null'
+        due_date:
+          title: Due Date
+          type:
+          - string
+          - 'null'
+        accepted:
+          title: Accepted
+          type: boolean
+        status:
+          $ref: '#/components/schemas/ActionItemStatus'
+      required:
+      - timestamp
+      - text
+      - assignees
+      - completion_type
+      - accepted
+      - status
+      title: RecapActionItem
+      type: object
+    ActionItemStatus:
+      enum:
+      - Done
+      - Archived
+      - Incomplete
+      title: ActionItemStatus
+      type: string
+    RecapDecision:
+      properties:
+        timestamp:
+          title: Timestamp
+          type: integer
+        text:
+          title: Text
+          type: string
+      required:
+      - timestamp
+      - text
+      title: RecapDecision
+      type: object
+    MediaUrlConfig:
+      description: Configuration for media_url expiration.
+      properties:
+        expire_in:
+          description: Optional expiration time in seconds (1h-24h). Defaults to 12h if not specified.
+          maximum: 86400
+          minimum: 3600
+          title: Expire In
+          type:
+          - integer
+          - 'null'
+      title: MediaUrlConfig
+      type: object
+    GetUploadsRequest:
+      description: Request body for listing API-uploaded recordings with optional filters and pagination.
+      properties:
+        pagination:
+          allOf:
+          - $ref: '#/components/schemas/PaginatedRequestParams'
+            nullable: true
+        filters:
+          allOf:
+          - $ref: '#/components/schemas/UploadFilters'
+            nullable: true
+      title: GetUploadsRequest
+      type: object
+    UploadFilters:
+      properties:
+        event_guid:
+          title: Event Guid
+          type:
+          - string
+          - 'null'
+        created_at_start:
+          title: Created At Start
+          type:
+          - string
+          - 'null'
+        created_at_end:
+          title: Created At End
+          type:
+          - string
+          - 'null'
+        updated_at_start:
+          title: Updated At Start
+          type:
+          - string
+          - 'null'
+        updated_at_end:
+          title: Updated At End
+          type:
+          - string
+          - 'null'
+        channel_id:
+          title: Channel Id
+          type:
+          - string
+          - 'null'
+        title:
+          title: Title
+          type:
+          - string
+          - 'null'
+        status:
+          title: Status
+          type:
+          - string
+          - 'null'
+      title: UploadFilters
+      type: object
+    Recording:
+      properties:
+        id:
+          title: Id
+          type: string
+        title:
+          title: Title
+          type:
+          - string
+          - 'null'
+        created_at:
+          format: date-time
+          title: Created At
+          type:
+          - string
+          - 'null'
+        updated_at:
+          format: date-time
+          title: Updated At
+          type:
+          - string
+          - 'null'
+        started_at:
+          format: date-time
+          title: Started At
+          type: string
+        ended_at:
+          format: date-time
+          title: Ended At
+          type:
+          - string
+          - 'null'
+        event_call_url:
+          title: Event Call Url
+          type:
+          - string
+          - 'null'
+        event_guid:
+          title: Event Guid
+          type:
+          - string
+          - 'null'
+        note_id:
+          title: Note Id
+          type:
+          - string
+          - 'null'
+        user_has_calendar_event:
+          title: User Has Calendar Event
+          type:
+          - boolean
+          - 'null'
+        transcript:
+          allOf:
+          - $ref: '#/components/schemas/Transcript'
+            nullable: true
+        ai_notes:
+          items:
+            $ref: '#/components/schemas/Recap'
+          title: Ai Notes
+          type:
+          - array
+          - 'null'
+        media_url:
+          description: Pre-signed URL for the recording media file. Requires privileged API key.
+          title: Media Url
+          type:
+          - string
+          - 'null'
+      title: Recording
+      type: object
+    RecordingResponse:
+      description: Response containing a single recording.
+      properties:
+        recording:
+          $ref: '#/components/schemas/Recording'
+      required:
+      - recording
+      title: RecordingResponse
+      type: object
+    PaginatedResponse_RecordingUpload_:
+      properties:
+        page_info:
+          $ref: '#/components/schemas/PageInfo'
+        data:
+          items:
+            $ref: '#/components/schemas/RecordingUpload'
+          title: Data
+          type: array
+      required:
+      - page_info
+      - data
+      title: PaginatedResponse[RecordingUpload]
+      type: object
+    PaginatedRequestParams:
+      description: Parameters sent in a request to paginate a queryset.
+      properties:
+        cursor:
+          title: Cursor
+          type:
+          - string
+          - 'null'
+        page_size:
+          default: 20
+          exclusiveMinimum: 0
+          maximum: 50
+          minimum: 1
+          title: Page Size
+          type: integer
+      title: PaginatedRequestParams
+      type: object
+    RecordingUploadSubmitResponse:
+      description: Response for POST /recordings/upload — the 201 confirming a recording was queued for import.
+      properties:
+        recording_id:
+          title: Recording Id
+          type: string
+      required:
+      - recording_id
+      title: RecordingUploadSubmitResponse
+      type: object
+    TranscriptSegment:
+      properties:
+        start:
+          title: Start
+          type: number
+        end:
+          title: End
+          type: number
+        speaker:
+          title: Speaker
+          type:
+          - string
+          - 'null'
+        text:
+          title: Text
+          type: string
+      required:
+      - start
+      - end
+      - speaker
+      - text
+      title: TranscriptSegment
+      type: object
+    RecapTemplateSectionType:
+      enum:
+      - STANDARD
+      - CUSTOM
+      title: APIRecapTemplateSectionType
+      type: string
+    RecordingUploadsListResponse:
+      description: Response containing a paginated list of API-uploaded recordings with import status.
+      properties:
+        uploads:
+          $ref: '#/components/schemas/PaginatedResponse_RecordingUpload_'
+      required:
+      - uploads
+      title: RecordingUploadsListResponse
+      type: object
+    RecapTopic:
+      properties:
+        title:
+          title: Title
+          type: string
+        bullet_points:
+          items:
+            $ref: '#/components/schemas/RecapBulletPoint'
+          title: Bullet Points
+          type: array
+      required:
+      - title
+      - bullet_points
+      title: RecapTopic
+      type: object
+    PageInfo:
+      description: Information about a page returned in a paginated response.
+      properties:
+        cursor:
+          title: Cursor
+          type:
+          - string
+          - 'null'
+        page_size:
+          title: Page Size
+          type: integer
+      required:
+      - page_size
+      title: PageInfo
+      type: object
+    RecordingUploadRequest:
+      properties:
+        url:
+          format: uri
+          minLength: 1
+          title: Url
+          type: string
+        title:
+          maxLength: 255
+          title: Title
+          type: string
+        language_code:
+          allOf:
+          - $ref: '#/components/schemas/TranscriptionLanguage'
+            nullable: true
+        media_auth:
+          discriminator:
+            mapping:
+              basic_auth: '#/components/schemas/BasicAuth'
+              bearer_token: '#/components/schemas/BearerTokenAuth'
+            propertyName: type
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/BearerTokenAuth'
+          - $ref: '#/components/schemas/BasicAuth'
+          title: Media Auth
+        channel_id:
+          title: Channel Id
+          type:
+          - string
+          - 'null'
+        event_guid:
+          title: Event Guid
+          type:
+          - string
+          - 'null'
+      required:
+      - url
+      - title
+      title: RecordingUploadRequest
+      type: object
+    RecordingFilters:
+      properties:
+        event_guid:
+          title: Event Guid
+          type:
+          - string
+          - 'null'
+        created_at_start:
+          title: Created At Start
+          type:
+          - string
+          - 'null'
+        created_at_end:
+          title: Created At End
+          type:
+          - string
+          - 'null'
+        updated_at_start:
+          title: Updated At Start
+          type:
+          - string
+          - 'null'
+        updated_at_end:
+          title: Updated At End
+          type:
+          - string
+          - 'null'
+        channel_id:
+          title: Channel Id
+          type:
+          - string
+          - 'null'
+        title:
+          title: Title
+          type:
+          - string
+          - 'null'
+      title: RecordingFilters
+      type: object
+    Recap:
+      properties:
+        id:
+          title: Id
+          type: string
+        is_active:
+          title: Is Active
+          type: boolean
+        title:
+          title: Title
+          type: string
+        template_creator:
+          title: Template Creator
+          type: string
+        sections:
+          items:
+            $ref: '#/components/schemas/RecapTemplateSection'
+          title: Sections
+          type: array
+      required:
+      - id
+      - is_active
+      - title
+      - template_creator
+      - sections
+      title: Recap
+      type: object
+    RecapTemplateSection:
+      properties:
+        title:
+          title: Title
+          type: string
+        type:
+          $ref: '#/components/schemas/RecapTemplateSectionType'
+        content:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/RecapKeyMoment'
+            title: Key Moments Array
+            type: array
+          - items:
+              $ref: '#/components/schemas/RecapTopic'
+            title: Topics Array
+            type: array
+          - items:
+              $ref: '#/components/schemas/RecapActionItem'
+            title: Action Items Array
+            type: array
+          - items:
+              $ref: '#/components/schemas/RecapDecision'
+            title: Decisions Array
+            type: array
+          - type: string
+          title: Content
+      required:
+      - title
+      - type
+      - content
+      title: RecapTemplateSection
+      type: object
+    TranscriptionLanguage:
+      enum:
+      - en
+      - en_au
+      - en_uk
+      - en_us
+      - es
+      - fr
+      - de
+      - it
+      - pt
+      - nl
+      - hi
+      - ja
+      - zh
+      - fi
+      - ko
+      - pl
+      - ru
+      - tr
+      - uk
+      - vi
+      - af
+      - sq
+      - am
+      - ar
+      - hy
+      - as
+      - az
+      - ba
+      - eu
+      - be
+      - bn
+      - bs
+      - br
+      - bg
+      - my
+      - ca
+      - hr
+      - cs
+      - da
+      - et
+      - fo
+      - gl
+      - ka
+      - el
+      - gu
+      - ht
+      - ha
+      - haw
+      - he
+      - hu
+      - is
+      - id
+      - jw
+      - kn
+      - kk
+      - km
+      - lo
+      - la
+      - lv
+      - ln
+      - lt
+      - lb
+      - mk
+      - mg
+      - ms
+      - ml
+      - mt
+      - mi
+      - mr
+      - mn
+      - ne
+      - 'no'
+      - nn
+      - oc
+      - pa
+      - ps
+      - fa
+      - ro
+      - sa
+      - sr
+      - sn
+      - sd
+      - si
+      - sk
+      - sl
+      - so
+      - su
+      - sw
+      - sv
+      - de_ch
+      - tl
+      - tg
+      - ta
+      - tt
+      - te
+      - th
+      - bo
+      - tk
+      - ur
+      - uz
+      - cy
+      - yi
+      - yo
+      title: TranscriptionLanguage
+      type: string
+    ActionItemAssignee:
+      description: Represents an assignee of an action item.
+      properties:
+        id:
+          title: Id
+          type: string
+        full_name:
+          title: Full Name
+          type: string
+        email:
+          title: Email
+          type: string
+      required:
+      - id
+      - full_name
+      - email
+      title: ActionItemAssignee
+      type: object
+  securitySchemes:
+    DeveloperAPIKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+x-provenance:
+  method: searched
+  source: https://developers.fellow.ai/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://developers.fellow.ai/reference/apps_developer_api_api_append_note_agenda.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_archive_action_item.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_create_webhook.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_delete_note.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_delete_recording.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_delete_webhook.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_find_replace_note_agenda.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_get_action_item_by_id.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_get_action_items.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_get_authenticated_user.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_get_note_by_id.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_get_notes.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_get_recording_by_id.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_get_recordings.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_get_upload_by_id.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_get_webhook_by_id.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_list_uploads.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_list_webhooks.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_mark_action_item_complete.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_prepend_note_agenda.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_update_webhook.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_upload_recording.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_write_note_agenda.md
+  merge:
+    pages: 23
+    deduped: 69
+    conflicts_kept_first: 0

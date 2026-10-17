@@ -1,0 +1,122 @@
+openapi: 3.2.0
+info:
+  title: Fellow Developer Users API
+  version: 1.0.3
+  description: Create custom integrations and workflows with Fellow's meeting data
+servers:
+- url: https://{subdomain}.fellow.app
+  description: Fellow
+  variables:
+    subdomain:
+      default: your-fellow-subdomain
+      description: The subdomain for your Fellow workspace
+tags:
+- name: Users
+  description: Retrieve information about the currently authenticated user and their workspace.
+paths:
+  /api/v1/me:
+    get:
+      operationId: apps_developer_api_api_get_authenticated_user
+      summary: Get Authenticated User
+      parameters: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthenticatedUserResponse'
+      description: Get information about the authenticated user and their workspace.
+      tags:
+      - Users
+      security:
+      - DeveloperAPIKeyAuth: []
+components:
+  schemas:
+    UserInfo:
+      description: User information in API responses.
+      properties:
+        id:
+          title: Id
+          type: string
+        email:
+          title: Email
+          type: string
+        full_name:
+          title: Full Name
+          type: string
+      required:
+      - id
+      - email
+      - full_name
+      title: UserInfo
+      type: object
+    WorkspaceInfo:
+      description: Workspace information in API responses.
+      properties:
+        id:
+          title: Id
+          type: string
+        name:
+          title: Name
+          type: string
+        subdomain:
+          title: Subdomain
+          type: string
+      required:
+      - id
+      - name
+      - subdomain
+      title: WorkspaceInfo
+      type: object
+    AuthenticatedUserResponse:
+      description: Response for the /me endpoint.
+      properties:
+        user:
+          $ref: '#/components/schemas/UserInfo'
+        workspace:
+          $ref: '#/components/schemas/WorkspaceInfo'
+      required:
+      - user
+      - workspace
+      title: AuthenticatedUserResponse
+      type: object
+  securitySchemes:
+    DeveloperAPIKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+x-provenance:
+  method: searched
+  source: https://developers.fellow.ai/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://developers.fellow.ai/reference/apps_developer_api_api_append_note_agenda.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_archive_action_item.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_create_webhook.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_delete_note.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_delete_recording.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_delete_webhook.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_find_replace_note_agenda.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_get_action_item_by_id.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_get_action_items.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_get_authenticated_user.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_get_note_by_id.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_get_notes.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_get_recording_by_id.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_get_recordings.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_get_upload_by_id.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_get_webhook_by_id.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_list_uploads.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_list_webhooks.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_mark_action_item_complete.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_prepend_note_agenda.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_update_webhook.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_upload_recording.md
+  - https://developers.fellow.ai/reference/apps_developer_api_api_write_note_agenda.md
+  merge:
+    pages: 23
+    deduped: 69
+    conflicts_kept_first: 0
