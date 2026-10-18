@@ -284,6 +284,8 @@ apis:
   humanURL: https://developers.fellow.ai/
   baseURL: https://{subdomain}.fellow.app/api/v1
   tags:
+  - Recording
+  tags_raw:
   - Recordings
   properties:
   - type: OpenAPI
@@ -328,6 +330,8 @@ apis:
   humanURL: https://developers.fellow.ai/
   baseURL: https://{subdomain}.fellow.app/api/v1
   tags:
+  - User
+  tags_raw:
   - Users
   properties:
   - type: OpenAPI
@@ -374,6 +378,8 @@ apis:
   humanURL: https://developers.fellow.ai/
   baseURL: https://{subdomain}.fellow.app/api/v1
   tags:
+  - Webhook
+  tags_raw:
   - Webhooks
   properties:
   - type: OpenAPI
